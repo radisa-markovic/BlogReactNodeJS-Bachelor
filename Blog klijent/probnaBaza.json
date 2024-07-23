@@ -1,0 +1,68 @@
+{
+  "korisnici": [
+    {
+      "id": 0,
+      "ime": "Radisa",
+      "prezime": "Markovic",
+      "korisnickoIme": "test",
+      "imejl": "test@test.com",
+      "lozinka": "test"
+    }
+  ],
+  "objave": [
+    {
+      "id": "0",
+      "idObjave": 0,
+      "naslov": "Objava 1",
+      "autorID": "0",
+      "sadrzaj": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam sint excepturi rem molestias illo non dolorum earum voluptatem voluptatum minus nobis deleniti magni perspiciatis assumenda aliquid recusandae itaque, asperiores eos? Aspernatur doloremque iusto aut molestias modi similique perferendis provident deleniti.",
+      "tagovi": [
+        "tag1",
+        "tag2",
+        "tag3"
+      ]
+    },
+    {
+      "idObjave": 1,
+      "naslov": "Objava 2",
+      "autorID": "0",
+      "sadrzaj": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, vero fugiat itaque cumque blanditiis placeat.",
+      "tagovi": [
+        "tag1"
+      ]
+    },
+    {
+      "idObjave": 2,
+      "naslov": "Objava 3",
+      "autorID": "0",
+      "sadrzaj": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam sint excepturi rem molestias illo non dolorum earum voluptatem voluptatum minus nobis deleniti magni perspiciatis assumenda aliquid recusandae itaque, asperiores eos? Aspernatur doloremque iusto aut molestias modi similique perferendis provident deleniti.",
+      "tagovi": [
+        "tag1",
+        "tag2",
+        "tag3"
+      ]
+    },
+    {
+      "idObjave": 3,
+      "naslov": "Objava 4",
+      "autorID": "0",
+      "sadrzaj": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam sint excepturi rem molestias illo non dolorum earum voluptatem voluptatum minus nobis deleniti magni perspiciatis assumenda aliquid recusandae itaque, asperiores eos? Aspernatur doloremque iusto aut molestias modi similique perferendis provident deleniti.",
+      "tagovi": [
+        "tag1",
+        "tag2",
+        "tag3"
+      ]
+    },
+    {
+      "idObjave": 4,
+      "naslov": "Objava 5",
+      "autorID": "0",
+      "sadrzaj": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam sint excepturi rem molestias illo non dolorum earum voluptatem voluptatum minus nobis deleniti magni perspiciatis assumenda aliquid recusandae itaque, asperiores eos? Aspernatur doloremque iusto aut molestias modi similique perferendis provident deleniti.",
+      "tagovi": [
+        "tag1",
+        "tag2",
+        "tag3"
+      ]
+    }
+  ]
+}
