@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { body, param } from 'express-validator';
 
 import * as postController from '../controllers/post';
 import * as postValidator from '../validators/post';

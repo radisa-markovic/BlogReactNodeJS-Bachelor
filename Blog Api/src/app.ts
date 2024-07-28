@@ -1,20 +1,22 @@
-import express, { Request, Response, NextFunction } from 'express';
+import path from "path";
 
+import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
+
+import Post from './models/post';
+import User from './models/user';
 import postRoutes from './routes/post';
+import userRoutes from './routes/user';
 
 import putanje from './putanje';
-import cors from 'cors';
 import { uspostaviKonekciju } from './servisneStvari';
 import { azuirajNaslovnuSlikuUBazi } from './korisnik/korisnik.servis';
 import { vratiKorisnickeSlike } from './korisnik/korisnik.kontroler';
 import { potvrdiMejlZaPretplatu, ukloniPretplatu } from './mejlovi/mejl.kontroler';
 
-import Post from './models/post';
-
-const path = require("path");
 require('dotenv').config();
-
 const multer = require("multer");
+
 const storage = multer.diskStorage({
     destination: (request: any, file: any, callback: any) => {
         callback(null, './src/images/');
@@ -48,19 +50,25 @@ app.use((
 })
 
 app.use("/posts", postRoutes);
+app.use("/users", userRoutes);
+
 app.use("**", (request, response, next) => {
     response.status(404).json({
         message: "No such route exists"
     })
 });
 
-Post.sync()
-    .then((result: any) => {
-        app.listen(process.env.PORT || 3002);
-    })
-    .catch((error: any) => {
-        console.error(error);
-    })
+User.sync()
+    .then(() => {
+        Post.sync()
+        .then((result: any) => {
+            app.listen(process.env.PORT || 3002);
+        })
+        .catch((error: any) => {
+            console.error(error);
+        })
+    });
+
 
 
 // let OSNOVNI_URL_APLIKACIJE = "https://diplomskiblog.nutri4run.com";
