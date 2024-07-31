@@ -1,9 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { FieldValidationError, validationResult } from 'express-validator';
+import bcrypt from 'bcrypt';
 
 import User from '../models/user';
 
-export const getUsers = async (request: Request, response: Response, next: NextFunction) => {
+export const getUsers = async (
+    request: Request, 
+    response: Response, 
+    next: NextFunction
+) => {
     
     try
     {
@@ -73,10 +78,11 @@ export const createUser = async (request: Request, response: Response, next: Nex
     {
         try
         {
+            const hashedPassword = await bcrypt.hash(request.body.password, 12);
             await User.create({
                 email: request.body.email,
                 username: request.body.username,
-                password: request.body.password
+                password: hashedPassword
             });
 
             response.status(201).json({
@@ -191,5 +197,25 @@ export const deleteUser = async (
         response.status(error.statusCode).json({
             message: "THere has been a server error"
         });
+    }
+}
+
+export const login = async (
+    request: Request,
+    response: Response,
+    next: NextFunction
+) => {
+    const errors = validationResult(request);
+
+    try
+    {
+
+    }
+    catch(error: any)
+    {
+        if(!error.statusCode)
+            error.statusCode = 500;
+
+        next(error);
     }
 }

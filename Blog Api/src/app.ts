@@ -8,6 +8,8 @@ import User from './models/user';
 import postRoutes from './routes/post';
 import userRoutes from './routes/user';
 
+import sequelize from "./util/database";
+
 import putanje from './putanje';
 import { uspostaviKonekciju } from './servisneStvari';
 import { azuirajNaslovnuSlikuUBazi } from './korisnik/korisnik.servis';
@@ -32,7 +34,18 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use('/images', express.static(path.join(__dirname, '/images')));
+// app.use('/images', express.static(path.join(__dirname, '/images')));
+app.use((request, response, next) => {
+    User.findByPk(1)
+        .then((user) => {
+            //@ts-ignore
+            request.user = user;
+            next();
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+});
 
 app.use((
     error: any, 
@@ -58,17 +71,36 @@ app.use("**", (request, response, next) => {
     })
 });
 
-User.sync()
-    .then(() => {
-        Post.sync()
-        .then((result: any) => {
-            app.listen(process.env.PORT || 3002);
-        })
-        .catch((error: any) => {
-            console.error(error);
-        })
-    });
+User.hasMany(Post);
+Post.belongsTo(User, { 
+    constraints: true, 
+    onDelete: 'CASCADE'
+});
 
+sequelize.sync()
+    .then(() => {
+        return User.findByPk(1);
+    })
+    .then((user) => {
+        if(!user)
+        {
+            User.create({
+                username: "PeraPeric",
+                email: "pera@pera.com",
+                password: "123456789"
+            });
+        }
+        return user;
+    })
+    .then((user) => {
+        console.log(user);
+        app.listen(process.env.PORT || 3002, () => {
+            console.log("Server is up and running");
+        });
+    })
+    .catch((error: any) => {
+        console.error(error);
+    });
 
 
 // let OSNOVNI_URL_APLIKACIJE = "https://diplomskiblog.nutri4run.com";

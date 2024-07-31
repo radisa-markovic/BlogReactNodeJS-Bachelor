@@ -50,11 +50,13 @@ export const addPost = async (request: Request, response: Response, next: NextFu
     
         try
         {
-            const result = await Post.create({
+            //@ts-ignore
+            await request.user.createPost({
                 title: title,
                 description: description,
                 content: content,
-                coverImageUrl: coverImageUrl
+                coverImageUrl: coverImageUrl,
+                //@ts-ignore
             });   
             
             response.status(201).json({
@@ -106,7 +108,9 @@ export const getPost = async (request: Request, response: Response, next: NextFu
 
         response.status(201).json({
             message: "Post found",
-            post: result
+            post: result,
+            //@ts-ignore
+            OP: await result.getUser()
         });
     }
     catch(error: any)
