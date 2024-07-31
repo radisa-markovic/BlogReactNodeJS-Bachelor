@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { ErrorFormatter, validationResult, ValidationError, FieldValidationError } from 'express-validator';
 
-import Post, { PostInterface } from "../models/post";
+import Post from '../models/post';
+import Comment from "../models/comment";
+import User from "../models/user";
 
 export const getPosts = async (request: Request, response: Response, next: NextFunction) => {
     const errors = validationResult(request);
@@ -56,7 +58,6 @@ export const addPost = async (request: Request, response: Response, next: NextFu
                 description: description,
                 content: content,
                 coverImageUrl: coverImageUrl,
-                //@ts-ignore
             });   
             
             response.status(201).json({
@@ -98,7 +99,15 @@ export const getPost = async (request: Request, response: Response, next: NextFu
     const { postId } = request.params;
     try
     {
-        const result = await Post.findByPk(postId);
+        const result = await Post.findByPk(postId, { 
+            include: [
+                {
+                    model: Comment,
+                    required: true,
+                    include: [User]
+                }
+            ] 
+        });
         if(!result)
         {
             return response.status(404).json({
@@ -223,5 +232,44 @@ export const deletePost = async (request: Request, response: Response, next: Nex
         response.status(error.statusCode).json({
             message: 'Deletion failed'
         });
+    }
+}
+
+export const addComment = async (
+    request: Request, 
+    response: Response, 
+    next: NextFunction
+) => {
+    /**
+     * what I receive here from frontend:
+     * {
+     *  userId
+     *  postId,
+     *  content
+     * }
+     */
+    const { userId, postId, content } = request.body;
+    try
+    {
+        const post = await Post.findByPk(postId);
+        //@ts-ignore
+        const potentiallyNewCommentId = await post.createComment({
+            content: content,
+            userId: userId
+        }, {
+            where: {
+                id: postId
+            }
+        });
+
+        console.log(potentiallyNewCommentId.dataValues.id);
+
+        response.status(201).json({
+            message: "Comment successfully added"
+        });
+    }
+    catch(error)
+    {
+        next(error);
     }
 }

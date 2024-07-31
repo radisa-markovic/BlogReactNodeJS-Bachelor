@@ -26,5 +26,9 @@ router.delete(
     postValidator.validateId(),
     postController.deletePost
 );
+router.post(
+    "/addComment/:postId", 
+    postController.addComment
+);
 
 export default router;

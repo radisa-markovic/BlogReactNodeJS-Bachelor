@@ -5,6 +5,8 @@ import cors from 'cors';
 
 import Post from './models/post';
 import User from './models/user';
+import Comment from "./models/comment";
+
 import postRoutes from './routes/post';
 import userRoutes from './routes/user';
 
@@ -76,8 +78,19 @@ Post.belongsTo(User, {
     constraints: true, 
     onDelete: 'CASCADE'
 });
+Post.hasMany(Comment);
+Comment.belongsTo(Post, {
+    constraints: true,
+    onDelete: "CASCADE"
+});
+User.hasMany(Comment);
+Comment.belongsTo(User, {
+    constraints: true,
+    onDelete: "CASCADE"
+});
 
 sequelize.sync()
+// sequelize.sync({force: true})
     .then(() => {
         return User.findByPk(1);
     })
@@ -92,8 +105,11 @@ sequelize.sync()
         }
         return user;
     })
-    .then((user) => {
-        console.log(user);
+    // .then((user) => {
+    //     //@ts-ignore
+    //     return User
+    // })
+    .then(() => {
         app.listen(process.env.PORT || 3002, () => {
             console.log("Server is up and running");
         });
