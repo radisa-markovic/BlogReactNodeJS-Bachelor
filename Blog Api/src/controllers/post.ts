@@ -4,6 +4,7 @@ import { ErrorFormatter, validationResult, ValidationError, FieldValidationError
 import Post from '../models/post';
 import Comment from "../models/comment";
 import User from "../models/user";
+import Reaction from "../models/reaction";
 
 export const getPosts = async (request: Request, response: Response, next: NextFunction) => {
     const errors = validationResult(request);
@@ -270,6 +271,107 @@ export const addComment = async (
     }
     catch(error)
     {
+        next(error);
+    }
+}
+
+export const addReaction = async (
+    request: Request, 
+    response: Response, 
+    next: NextFunction
+) => {
+    const { code, postId, userId } = request.body;
+    try
+    {
+        /**
+         * 1. find the corresponding post, if exists
+         * 2. find the reaction for the given userId:
+         *      1. if exist, and same code is received, delete from table
+         *      2. if exist, and different code is received, set that code
+         *      3. if it doesn't exist, just set it
+         */
+        const post = await Post.findByPk(postId);
+        if(!post)
+        {
+            return response.status(404).json({
+                message: "No such post found"
+            });
+        }
+
+        //@ts-ignore
+        const existingReaction = await post.getReactions({
+            where: {
+                userId: userId
+            }
+        });
+
+        //if i index [0] in getReactions(), it won't work
+        //probably due to async stuff, and indexing being sync
+        // maybe [existingReaction] = await post.getReactions()?
+        if(existingReaction.length === 0)
+        {
+            //@ts-ignore
+            await post.createReaction({
+                postId: postId,
+                userId: userId,
+                code: code
+            });
+
+            return response.status(201).json({
+                message: "Reaction successfully set"
+            });
+        }
+
+        if(existingReaction[0].code === code)
+        {
+            await Reaction.destroy({
+                where: {
+                    userId: userId,
+                    postId: postId
+                }
+            })
+            //@ts-ignore
+            // await post.removeComment({
+            //     where: {
+            //         userId: userId,
+            //         postId: postId
+            //     }
+            // });
+
+            return response.status(200).json({
+                message: "Reaction successfully removed"
+            });
+        }
+       
+        //@ts-ignore
+        // await post.setReactions({
+        //     code: code
+        // }, {
+        //     where: {
+        //         postId: postId,
+        //         userId: userId
+        //     }
+        // });
+
+        await Reaction.update({
+            code: code
+        }, {
+            where: {
+                postId: postId,
+                userId: userId
+            }
+        });
+
+        return response.status(200).json({
+            message: "Response successfully altered"
+        });
+
+    }
+    catch(error: any)
+    {
+        if(!error.statusCode)
+            error.statusCode = 500;
+
         next(error);
     }
 }

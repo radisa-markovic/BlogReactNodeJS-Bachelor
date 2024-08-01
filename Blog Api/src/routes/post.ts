@@ -30,5 +30,9 @@ router.post(
     "/addComment/:postId", 
     postController.addComment
 );
+router.post(
+    "/addReaction",
+    postController.addReaction
+);
 
 export default router;

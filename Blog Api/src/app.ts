@@ -6,6 +6,7 @@ import cors from 'cors';
 import Post from './models/post';
 import User from './models/user';
 import Comment from "./models/comment";
+import Reaction from "./models/reaction";
 
 import postRoutes from './routes/post';
 import userRoutes from './routes/user';
@@ -88,6 +89,13 @@ Comment.belongsTo(User, {
     constraints: true,
     onDelete: "CASCADE"
 });
+Post.hasMany(Reaction);
+Reaction.belongsTo(Post, {
+    constraints: true,
+    onDelete: "CASCADE"
+});
+User.hasMany(Reaction);
+Reaction.belongsTo(User);
 
 sequelize.sync()
 // sequelize.sync({force: true})
