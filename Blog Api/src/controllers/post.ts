@@ -283,13 +283,6 @@ export const addReaction = async (
     const { code, postId, userId } = request.body;
     try
     {
-        /**
-         * 1. find the corresponding post, if exists
-         * 2. find the reaction for the given userId:
-         *      1. if exist, and same code is received, delete from table
-         *      2. if exist, and different code is received, set that code
-         *      3. if it doesn't exist, just set it
-         */
         const post = await Post.findByPk(postId);
         if(!post)
         {

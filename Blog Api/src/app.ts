@@ -7,6 +7,7 @@ import Post from './models/post';
 import User from './models/user';
 import Comment from "./models/comment";
 import Reaction from "./models/reaction";
+import Tag from "./models/tag";
 
 import postRoutes from './routes/post';
 import userRoutes from './routes/user';
@@ -96,6 +97,8 @@ Reaction.belongsTo(Post, {
 });
 User.hasMany(Reaction);
 Reaction.belongsTo(User);
+// Post.hasMany(Tag);
+// Tag.hasMany(Post);
 
 sequelize.sync()
 // sequelize.sync({force: true})
