@@ -2,6 +2,9 @@ import { body, param, ValidationChain } from 'express-validator';
 
 import User from '../models/user';
 
+const MINIMUM_PASSWORD_LENGTH: number = 6;
+const MINIMUM_USERNAME_LENGTH: number = 4
+
 export const validateID = (): ValidationChain => {
     return param('userId')
         .trim()
@@ -13,7 +16,7 @@ export const validateUser = (): ValidationChain[] => {
     return [
         body('username')
             .trim()
-            .isLength({min:4})
+            .isLength({min:MINIMUM_USERNAME_LENGTH})
             .withMessage("Username must be at least 4 characters long")
             .custom((username) => {
                 return User.findOne({
@@ -41,7 +44,20 @@ export const validateUser = (): ValidationChain[] => {
                 })
             }),
         body('password')
-            .isLength({min:6})      
+            .isLength({min:MINIMUM_PASSWORD_LENGTH})      
             .withMessage("Password needs to be at least 6 characters long")              
+    ];
+}
+
+export const validateLoginData = (): ValidationChain[] => {
+    return [
+        body('email')
+            .trim()
+            .normalizeEmail()
+            .isEmail()
+            .withMessage("Email is not in correct form"),
+        body('password')
+            .isLength({min: MINIMUM_PASSWORD_LENGTH})
+            .withMessage("Password should be at least 6 characters long")
     ];
 }

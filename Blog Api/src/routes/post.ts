@@ -2,10 +2,11 @@ import { Router } from 'express';
 
 import * as postController from '../controllers/post';
 import * as postValidator from '../validators/post';
+import { checkJwt } from '../middleware/jwtAuth';
 
 const router = Router();
 
-router.get("/", postController.getPosts);
+router.get("/", checkJwt, postController.getPosts);
 router.get(
     "/:postId", 
     postValidator.validateId(),

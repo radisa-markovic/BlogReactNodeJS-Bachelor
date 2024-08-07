@@ -1,8 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { FieldValidationError, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 import User from '../models/user';
+
+// const ACCESS_TOKEN_SECRET_SIGNATURE: string = "aa711eb31bfe9f77d61ec4146bdd521a3c00cff92169d9b7085965a49f03c97daa42399fc622c1488c292c9244e92ac702b9a4b34dd9e8994b9012e61aae3284";
 
 export const getUsers = async (
     request: Request, 
@@ -206,16 +209,63 @@ export const login = async (
     next: NextFunction
 ) => {
     const errors = validationResult(request);
+    const { email, password, username } = request.body;
 
-    try
+    if(errors.isEmpty())
     {
-
+        try
+        {
+            const user: any = await User.findOne({
+                where: {
+                    email: email,
+                }
+            })
+    
+            if(!user)
+            {
+                return response.status(404).json({
+                    message: "User with given email not found"
+                });
+            }
+    
+            //@ts-ignore
+            const passwordIsMatched = await bcrypt.compare(password, user.password);
+            if(!passwordIsMatched)
+            {
+                return response.status(404).json({
+                    message: "Password does not match"
+                });
+            }
+    
+            const accessToken = jwt.sign({
+                email: user.email,
+                id: user.id
+            }, process.env.ACCESS_TOKEN_SECRET_SIGNATURE!, {
+                expiresIn: '1h'
+            });
+    
+            response.status(201).json({
+                accessToken: accessToken
+            });
+        }
+        catch(error: any)
+        {
+            if(!error.statusCode)
+                error.statusCode = 500;
+    
+            next(error);
+        }
     }
-    catch(error: any)
+    else
     {
-        if(!error.statusCode)
-            error.statusCode = 500;
-
-        next(error);
-    }
+        const formattedError = errors.formatWith((error) => {
+            return {
+                [(error as FieldValidationError).path]: (error as FieldValidationError).msg
+            }
+        });
+        response.status(422).json({
+            message: "Validation failed",
+            errors: formattedError.array()
+        });
+    }    
 }

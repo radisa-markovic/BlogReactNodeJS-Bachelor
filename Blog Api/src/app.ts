@@ -2,6 +2,7 @@ import path from "path";
 
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
 
 import Post from './models/post';
 import User from './models/user';
@@ -20,7 +21,8 @@ import { azuirajNaslovnuSlikuUBazi } from './korisnik/korisnik.servis';
 import { vratiKorisnickeSlike } from './korisnik/korisnik.kontroler';
 import { potvrdiMejlZaPretplatu, ukloniPretplatu } from './mejlovi/mejl.kontroler';
 
-require('dotenv').config();
+// require('dotenv').config();
+
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -37,6 +39,7 @@ const upload = multer({storage: storage})
 const app = express();
 
 app.use(express.json());
+dotenv.config();
 app.use(cors());
 // app.use('/images', express.static(path.join(__dirname, '/images')));
 app.use((request, response, next) => {
@@ -50,21 +53,6 @@ app.use((request, response, next) => {
             console.error(error);
         })
 });
-
-app.use((
-    error: any, 
-    request: Request, 
-    response: Response, 
-    next: NextFunction
-) => {
-    const data = error.data;
-    const status = error.statusCode || 500;
-    const message = error.message || "Something went wrong";
-    response.status(status).json({
-        message: message,
-        data: data
-    });
-})
 
 app.use("/posts", postRoutes);
 app.use("/users", userRoutes);
@@ -99,6 +87,23 @@ User.hasMany(Reaction);
 Reaction.belongsTo(User);
 // Post.hasMany(Tag);
 // Tag.hasMany(Post);
+
+//Read the docs: it says that this universal error handler should be set last
+app.use((
+    error: any, 
+    request: Request, 
+    response: Response, 
+    next: NextFunction
+) => {
+    const data = error.data;
+    const status = error.statusCode || 500;
+    const message = error.message || "Something went wrong";
+
+    response.status(status).json({
+        message: message,
+        data: data
+    });
+});
 
 sequelize.sync()
 // sequelize.sync({force: true})

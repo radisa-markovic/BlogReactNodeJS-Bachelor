@@ -32,4 +32,10 @@ router.delete(
     userController.deleteUser
 );
 
+router.post(
+    "/login", 
+    userValidator.validateLoginData(),
+    userController.login
+);
+
 export default router;
