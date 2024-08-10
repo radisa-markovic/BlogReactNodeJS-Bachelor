@@ -14,7 +14,8 @@ router.get(
 );
 router.post(
     "/create", 
-    postValidator.validatePost(),
+    // checkJwt,
+    // postValidator.validatePost(),
     postController.addPost
 );
 router.patch(

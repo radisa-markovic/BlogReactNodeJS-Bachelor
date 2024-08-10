@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
 import NapisiObjavu from './components/blog/NapisiObjavu';
 import SpisakObjava from './components/blog/SpisakObjava';
 import Home from './components/Home';
@@ -16,14 +17,17 @@ import { BanovaniKorisnikPrikaz } from './components/korisnik/BanovaniKorisnikPr
 import KorisnickaStanica from './components/korisnik/KorisnickaStranica';
 import { PretplataNaBlog } from './components/PretplataNaBlog';
 
-
-
 function App() {
   const [korisnik, setKorisnik] = useState<Korisnik>({
     id: -1, 
     korisnickoIme: "",
     adminStatus: false,
     brojNeprocitanihPoruka: 0
+  });
+  const [accessToken, setAccessToken] = useState<string>("");
+  const [userData, setUserData] = useState<{id: number, username: string}>({
+    id: -1,
+    username: ''
   });
 
   useEffect(() => {
@@ -35,12 +39,18 @@ function App() {
     }
   }, []);
 
+  const logout = () => {
+    alert("User is logged out");
+  }
+
   return (
     <BrowserRouter>
-      <Navbar korisnickoIme={korisnik.korisnickoIme} 
-              setKorisnik={setKorisnik}
-              brojNeprocitanihObjava={korisnik.brojNeprocitanihPoruka}
-              adminJePrijavljen={korisnik.adminStatus}
+      <Navbar 
+          accessToken={accessToken}
+          userData={userData} 
+          logout={logout}
+          // brojNeprocitanihObjava={korisnik.brojNeprocitanihPoruka}
+          // adminJePrijavljen={korisnik.adminStatus}
       />
       <Switch>
         <Route exact path="/">
@@ -50,18 +60,25 @@ function App() {
           <NapraviNalog/>
         </Route>
         <Route exact path="/prijaviSe">
-          <PrijaviSe korisnickoIme={korisnik.korisnickoIme} setKorisnik={setKorisnik}/>
+          <PrijaviSe 
+              setAccessToken={setAccessToken}
+              setUserData={setUserData}
+          />
         </Route>
         <Route exact path="/napisiObjavu">
-          <NapisiObjavu prijavljeniKorisnik={korisnik}/>
+          <NapisiObjavu 
+              accessToken={accessToken}
+              userData={userData}
+          />
         </Route>
         {/*========== ZA EDIT ==========*/}
-        <Route exact path="/napisiObjavu/:idObjave">
+        {/* <Route exact path="/napisiObjavu/:idObjave">
           <NapisiObjavu prijavljeniKorisnik={korisnik}/>
-        </Route>
+        </Route> */}
         <Route exact path="/sveObjave">
-          <SpisakObjava adminJePrijavljen={korisnik.adminStatus} 
-                        prijavljenoKorisnickoIme={korisnik.korisnickoIme}
+          <SpisakObjava 
+              adminJePrijavljen={korisnik.adminStatus} 
+              prijavljenoKorisnickoIme={korisnik.korisnickoIme}
           />
         </Route>
         {/*ovo treba da se sredi u smislu naziva komponente i tome slicno*/}
@@ -69,7 +86,10 @@ function App() {
           <PunaObjava prijavljeniKorisnik={korisnik}/>
         </Route>
         <Route exact path="/objaveKorisnika/:korisnickoIme">
-          <KorisnickaStanica adminJePrijavljen={korisnik.adminStatus} korisnik={korisnik}/>
+          <KorisnickaStanica 
+              adminJePrijavljen={korisnik.adminStatus} 
+              korisnik={korisnik}
+          />
         </Route>
         <Route exact path="/mojaAktivnost">
           <Aktivnost korisnik={korisnik}/>

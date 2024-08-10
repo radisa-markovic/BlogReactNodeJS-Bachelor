@@ -2,19 +2,29 @@ import React from 'react';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { Korisnik } from '../models/Korisnik';
 
+// interface NavbarProps
+// {
+//     korisnickoIme: string,
+//     adminJePrijavljen: boolean,
+//     brojNeprocitanihObjava: number,
+//     setKorisnik: React.Dispatch<React.SetStateAction<Korisnik>>;
+// }
+
 interface NavbarProps
 {
-    korisnickoIme: string,
-    adminJePrijavljen: boolean,
-    brojNeprocitanihObjava: number,
-    setKorisnik: React.Dispatch<React.SetStateAction<Korisnik>>;
+    userData: { id: number, username: string };
+    accessToken: string;
+    logout: () => void
 }
 
-function Navbar(props: NavbarProps): JSX.Element
-{
-    const { korisnickoIme, adminJePrijavljen, setKorisnik: setKorisnickoIme } = props;
+const Navbar: React.FC<NavbarProps> = ({
+    userData, 
+    accessToken,
+    logout
+}) => {
+    // const { korisnickoIme, adminJePrijavljen, setKorisnik: setKorisnickoIme } = props;
     const history = useHistory();
-    console.log(props.brojNeprocitanihObjava)
+    // console.log(props.brojNeprocitanihObjava)
 
     return (
         <nav className="navigation">
@@ -61,9 +71,14 @@ function Navbar(props: NavbarProps): JSX.Element
                         Pretplata
                     </NavLink>
                 </li>
-                { korisnickoIme === "" && prikazZaNeprijavljene() }
-                
-                { korisnickoIme !== "" && nacrtajKorisnickiMeni() }
+                { 
+                    accessToken === "" && 
+                    prikazZaNeprijavljene() 
+                }
+                { 
+                    accessToken !== "" && 
+                    nacrtajKorisnickiMeni() 
+                }
             </ul>
         </nav>
     );
@@ -98,12 +113,12 @@ function Navbar(props: NavbarProps): JSX.Element
     {
         return (
             <li className="navigation__item dropdown__parent" onTouchEnd={(event) => toggleMenu(event)}>
-                <Link to={`/poruke/${props.korisnickoIme}`} 
+                {/* <Link to={`/poruke/${props.korisnickoIme}`} 
                       className='dugme-broj-neprocitanih-poruka'
                 >
                     { props.brojNeprocitanihObjava }
-                </Link>
-                <span>({ korisnickoIme })</span> 
+                </Link> */}
+                <span>({ userData.username })</span> 
                 <ul className="dropdown__kid korisnicki-dropdown">
                     <li className="navigation__item">
                         <NavLink 
@@ -117,7 +132,7 @@ function Navbar(props: NavbarProps): JSX.Element
                     </li>
                     <li className="navigation__item">
                         <NavLink 
-                            to={`/objaveKorisnika/${korisnickoIme}`} 
+                            to={`/objaveKorisnika/${userData.username}`} 
                             className="navigation__link"
                             activeClassName='active-route'
                         >
@@ -144,14 +159,14 @@ function Navbar(props: NavbarProps): JSX.Element
                     </li>
                     <li className="navigation__item">
                         <NavLink 
-                            to={`/poruke/${korisnickoIme}`} 
+                            to={`/poruke/${userData.username}`} 
                             className="navigation__link"
                             activeClassName='active-route'    
                         >
                             Poruke
                         </NavLink>
                     </li>
-                    {
+                    {/* {
                         adminJePrijavljen && (
                             <li className="navigation__item">
                                 <NavLink 
@@ -163,9 +178,9 @@ function Navbar(props: NavbarProps): JSX.Element
                                 </NavLink>
                             </li> 
                         )
-                    }
+                    } */}
                     <li className="navigation__item">
-                        <Link to="#" className="navigation__link" onClick={odjaviSe}>
+                        <Link to="#" className="navigation__link" onClick={logout}>
                             Odjava
                         </Link>
                     </li>
@@ -174,18 +189,18 @@ function Navbar(props: NavbarProps): JSX.Element
         );
     }
 
-    function odjaviSe()
-    {
-        setKorisnickoIme({
-            id: -1, 
-            korisnickoIme: "",
-            adminStatus: false,
-            brojNeprocitanihPoruka: -1
-        });    
-        localStorage.removeItem("korisnik");
-        history.push("/");  
-        alert("Uspešna odjava");          
-    }
+    // function odjaviSe()
+    // {
+    //     setKorisnickoIme({
+    //         id: -1, 
+    //         korisnickoIme: "",
+    //         adminStatus: false,
+    //         brojNeprocitanihPoruka: -1
+    //     });    
+    //     localStorage.removeItem("korisnik");
+    //     history.push("/");  
+    //     alert("Uspešna odjava");          
+    // }
 
     function toggleMenu(event: React.TouchEvent<HTMLLIElement>)
     {

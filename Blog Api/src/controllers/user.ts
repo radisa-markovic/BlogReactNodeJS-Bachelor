@@ -104,14 +104,19 @@ export const createUser = async (request: Request, response: Response, next: Nex
     }
     else
     {
-        const formattedError = errors.formatWith((error) => {
-            return {
-                [(error as FieldValidationError).path]: (error as FieldValidationError).msg
-            }
-        });
+        // const formattedError = errors.formatWith((error) => {
+        //     return {
+        //         [(error as FieldValidationError).path]: (error as FieldValidationError).msg
+        //     }
+        // });
+        // console.log(formattedError.array());
+        // response.status(422).json({
+        //     message: "Validation failed",
+        //     errors: formattedError.array()
+        // }); 
         response.status(422).json({
             message: "Validation failed",
-            errors: formattedError.array()
+            errors: errors.array()
         }); 
     }
 }
@@ -210,6 +215,7 @@ export const login = async (
 ) => {
     const errors = validationResult(request);
     const { email, password, username } = request.body;
+    console.log(errors);
 
     if(errors.isEmpty())
     {
@@ -217,7 +223,8 @@ export const login = async (
         {
             const user: any = await User.findOne({
                 where: {
-                    email: email,
+                    // email: email,
+                    username: username
                 }
             })
     
@@ -245,7 +252,9 @@ export const login = async (
             });
     
             response.status(201).json({
-                accessToken: accessToken
+                accessToken: accessToken,
+                username: user.username,
+                id: user.id
             });
         }
         catch(error: any)
@@ -258,14 +267,18 @@ export const login = async (
     }
     else
     {
-        const formattedError = errors.formatWith((error) => {
-            return {
-                [(error as FieldValidationError).path]: (error as FieldValidationError).msg
-            }
-        });
+        // const formattedError = errors.formatWith((error) => {
+        //     return {
+        //         [(error as FieldValidationError).path]: (error as FieldValidationError).msg
+        //     }
+        // });
+        // response.status(422).json({
+        //     message: "Validation failed",
+        //     errors: formattedError.array()
+        // });
         response.status(422).json({
             message: "Validation failed",
-            errors: formattedError.array()
+            errors: errors.array()
         });
     }    
 }

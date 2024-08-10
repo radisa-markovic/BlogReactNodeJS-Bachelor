@@ -51,11 +51,15 @@ export const validateUser = (): ValidationChain[] => {
 
 export const validateLoginData = (): ValidationChain[] => {
     return [
-        body('email')
+        body('username')
             .trim()
-            .normalizeEmail()
-            .isEmail()
-            .withMessage("Email is not in correct form"),
+            .isLength({min:MINIMUM_USERNAME_LENGTH})
+            .withMessage("Username must be at least 4 characters long"),
+        // body('email')
+        //     .trim()
+        //     .normalizeEmail()
+        //     .isEmail()
+        //     .withMessage("Email is not in correct form"),
         body('password')
             .isLength({min: MINIMUM_PASSWORD_LENGTH})
             .withMessage("Password should be at least 6 characters long")

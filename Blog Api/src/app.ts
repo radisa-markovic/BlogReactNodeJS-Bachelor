@@ -3,6 +3,7 @@ import path from "path";
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import multer from "multer";
 
 import Post from './models/post';
 import User from './models/user';
@@ -14,6 +15,7 @@ import postRoutes from './routes/post';
 import userRoutes from './routes/user';
 
 import sequelize from "./util/database";
+import { multerUploadMiddleware } from "./util/multer";
 
 import putanje from './putanje';
 import { uspostaviKonekciju } from './servisneStvari';
@@ -21,27 +23,22 @@ import { azuirajNaslovnuSlikuUBazi } from './korisnik/korisnik.servis';
 import { vratiKorisnickeSlike } from './korisnik/korisnik.kontroler';
 import { potvrdiMejlZaPretplatu, ukloniPretplatu } from './mejlovi/mejl.kontroler';
 
-// require('dotenv').config();
-
-const multer = require("multer");
-
-const storage = multer.diskStorage({
-    destination: (request: any, file: any, callback: any) => {
-        callback(null, './src/images/');
-    },
-    filename: (request: any, file: any, callback: any) => {
-        callback(null, new Date().toISOString().replace(/:/g, '-') + path.extname(file.originalname));
-    }
-});
-
-const upload = multer({storage: storage})
-
-const app = express();
-
-app.use(express.json());
 dotenv.config();
+const app = express();
+app.use(express.json());
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(multerUploadMiddleware.single('coverImage'));
 app.use(cors());
-// app.use('/images', express.static(path.join(__dirname, '/images')));
+// app.use((request, response, next) => {
+//     /**
+//      * Don't set on request, since this responds on a request from somewhere else
+//      */
+//     response.setHeader("Access-Control-Allow-Origin", '*');
+//     response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+//     response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//     console.log(response.getHeaders());
+//     next();
+// });
 app.use((request, response, next) => {
     User.findByPk(1)
         .then((user) => {
@@ -108,30 +105,9 @@ app.use((
 sequelize.sync()
 // sequelize.sync({force: true})
     .then(() => {
-        return User.findByPk(1);
-    })
-    .then((user) => {
-        if(!user)
-        {
-            User.create({
-                username: "PeraPeric",
-                email: "pera@pera.com",
-                password: "123456789"
-            });
-        }
-        return user;
-    })
-    // .then((user) => {
-    //     //@ts-ignore
-    //     return User
-    // })
-    .then(() => {
         app.listen(process.env.PORT || 3002, () => {
             console.log("Server is up and running");
         });
-    })
-    .catch((error: any) => {
-        console.error(error);
     });
 
 

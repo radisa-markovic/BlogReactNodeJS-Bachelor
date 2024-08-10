@@ -1,101 +1,155 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
-import { OSNOVNI_PUT } from "../../ApiPutanje";
-import { upakujZahtev, uputiPoziv } from "../../ServisneStvari";
+import FormError from "../FormError";
 
-interface PodaciZaNalog
-{
-    korisnickoIme: string,
-    lozinka: string,
-    email: string
-}
+const API_BASE: string = "http://localhost:3002";
 
-function NapraviNalog(): JSX.Element
-{
-    const [podaciZaNalog, setPodaciZaNalog] = useState<PodaciZaNalog>({
-        korisnickoIme: "",
-        lozinka: "",
-        email: ""
-    });
-    const [korisnickoImeZauzeto, setKorisnickoImeJeZauzeto] = useState<boolean>(false);
+const NapraviNalog: React.FC<any> = () => {
+    const [email, setEmail] = useState<string>('');
+    const [emailError, setEmailError] = useState<string>('');
+
+    const [username, setUsername] = useState<string>('');
+    const [usernameError, setUsernameError] = useState<string>('');
+   
+    const [password, setPassword] = useState<string>('');
+    const [passwordError, setPasswordError] = useState<string>('');
+   
     const history = useHistory();
+
+    const createAccount = (event: React.MouseEvent) => {
+        event.preventDefault();
+        setEmailError('');
+        setUsernameError('');
+        setPasswordError('');
+
+        const request: RequestInit = {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            mode: 'cors',
+            body: JSON.stringify({
+                email,
+                username,
+                password
+            })
+        };
+
+        fetch(API_BASE + "/users/create", request)
+            .then((response) => {
+                //here I have the response statusCode etc
+                //after response.json() I don't have it anymore 
+                if(response.ok && response.statusText === "Created")
+                {
+                    alert("User successfully created");
+                    history.push("/prijaviSe");
+                }
+                else
+                {
+                    return response.json();
+                }
+            })
+            .then((response) => {
+                // console.log(response.status);
+                // console.log(response.statusCode);
+                const error = new Error(response.message);
+                //@ts-ignore
+                error.errors = response.errors;
+                throw error;
+            })
+            .catch((error) => {
+                interface ValidationError {
+                    location: string, 
+                    msg: string, 
+                    path: string, 
+                    type: string, 
+                    value: string
+                }
+                error.errors.forEach((error: ValidationError) => {
+                    switch(error.path)
+                    {
+                        case 'username':
+                            setUsernameError(error.msg);
+                            break;
+                        case 'email':
+                            setEmailError(error.msg);
+                            break;
+                        case 'password':
+                            setPasswordError(error.msg);
+                            break;
+                        default:
+                            break; 
+                    }
+                });
+            });
+    }
 
     return (
         <section className="napravi-nalog donja-margina-potomci">
             <form action="POST" className="forma donja-margina-potomci">
                 <h1 className="title">
-                    Napravi nalog
+                    Create account
                 </h1>
+                { 
+                    emailError !== '' && 
+                    <FormError errorText={emailError}/>
+                }
+                <div>
+                    <label htmlFor="email" style={{fontSize: '16px'}}>
+                        Email:
+                    </label>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        id="email" 
+                        className="kontrola"
+                        onChange={({target}) => setEmail(target.value)}    
+                    />
+                </div>
                 <article className="forma__polje">
-                    <label htmlFor="korisnickoIme">
-                        <input type="text" 
-                               placeholder="Korisnicko ime" 
-                               id="korisnickoIme" 
-                               name="korisnickoIme"
-                               className="kontrola"
-                               onChange={promenaUnosa}
+                    { 
+                        usernameError !== '' && 
+                        <FormError errorText={usernameError}/>
+                    }
+                    <label htmlFor="korisnickoIme" style={{fontSize: '16px'}}>
+                        Username:
+                        <input 
+                            type="text" 
+                            placeholder="Korisnicko ime" 
+                            id="korisnickoIme" 
+                            name="korisnickoIme"
+                            className="kontrola"
+                            onChange={({target}) => setUsername(target.value)}
                         />
-                        { 
-                            korisnickoImeZauzeto && 
-                            <p style={{color: 'red'}}>
-                                <i className="fa-solid fa-triangle-exclamation"
-                                   style={{color: 'red', marginRight: '5px'}}
-                                ></i>
-                                Korisničko ime je zauzeto
-                            </p>
-                        }
                     </label>
                 </article>
                 <article className="forma__polje">
-                    <label htmlFor="lozinka">
-                        <input type="password" 
-                               placeholder="Lozinka"
-                               id="lozinka"
-                               name="lozinka"
-                               className="kontrola"
-                               onChange={promenaUnosa}
+                    { 
+                        passwordError !== '' && 
+                        <FormError errorText={passwordError}/>
+                    }
+                    <label htmlFor="lozinka" style={{fontSize: '16px'}}>
+                        Password:
+                        <input 
+                            type="password" 
+                            placeholder="Lozinka"
+                            id="lozinka"
+                            name="lozinka"
+                            className="kontrola"
+                            onChange={({target}) => setPassword(target.value)}
                         />
                     </label>
                 </article>
 
-                <button className="forma__dugme" onClick={(event) => napraviNalog(event)}>
+                <button 
+                    className="forma__dugme" 
+                    onClick={(event) => createAccount(event)}
+                >
                     Napravi nalog
                 </button>
             </form>
         </section>
     );
-
-    function promenaUnosa(event: React.ChangeEvent<HTMLInputElement>): void
-    {
-        const { name, value } = event.target;
-        setPodaciZaNalog({
-            ...podaciZaNalog,
-            [name]: value
-        });    
-    }
-
-    function napraviNalog(event: React.FormEvent<HTMLButtonElement>): void
-    {
-        event.preventDefault();
-        setKorisnickoImeJeZauzeto(false);
-
-        const objekatZahteva = upakujZahtev("POST", podaciZaNalog);
-       
-        uputiPoziv(`${OSNOVNI_PUT}/napraviNalog`, objekatZahteva) 
-        .then(odgovor => {
-            alert("Pravljenje naloga je uspelo");
-            history.push("/prijaviSe");
-        })
-        .catch((greska: Response) => {
-            console.log(greska);
-            
-            if(greska.statusText === "ER_DUP_ENTRY")
-            {
-                setKorisnickoImeJeZauzeto(true);
-            }
-        })
-
-    }
 }
 
 export default NapraviNalog;

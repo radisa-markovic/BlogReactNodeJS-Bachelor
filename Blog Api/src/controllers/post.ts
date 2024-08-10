@@ -40,17 +40,18 @@ export const getPosts = async (request: Request, response: Response, next: NextF
 }
 
 export const addPost = async (request: Request, response: Response, next: NextFunction) => {
-    const errors = validationResult(request);
+    // const errors = validationResult(request);
 
-    if(errors.isEmpty())
-    {
+    // if(errors.isEmpty())
+    // {
         const { 
             title, 
             description, 
             content,
-            coverImageUrl
+            userId
          } = request.body as any;
-    
+        const coverImageUrl = request.file!.path; 
+
         try
         {
             //@ts-ignore
@@ -59,6 +60,7 @@ export const addPost = async (request: Request, response: Response, next: NextFu
                 description: description,
                 content: content,
                 coverImageUrl: coverImageUrl,
+                userId: userId
             });   
             
             response.status(201).json({
@@ -73,9 +75,9 @@ export const addPost = async (request: Request, response: Response, next: NextFu
             }
             next(error);
         }
-    }
-    else
-    {
+    // }
+    // else
+    // {
         /**
          * errors: {
          *     title: 'The title is too short',
@@ -84,16 +86,16 @@ export const addPost = async (request: Request, response: Response, next: NextFu
          *     content: 'Content is missing'
          * }
          */
-        const formattedError = errors.formatWith((error) => {
-            return {
-                [(error as FieldValidationError).path]: (error as FieldValidationError).msg
-            }
-        });
-        response.status(422).json({
-            message: "Validation failed",
-            errors: formattedError.array()
-        });
-    }
+    //     const formattedError = errors.formatWith((error) => {
+    //         return {
+    //             [(error as FieldValidationError).path]: (error as FieldValidationError).msg
+    //         }
+    //     });
+    //     response.status(422).json({
+    //         message: "Validation failed",
+    //         errors: formattedError.array()
+    //     });
+    // }
 }
 
 export const getPost = async (request: Request, response: Response, next: NextFunction) => {
