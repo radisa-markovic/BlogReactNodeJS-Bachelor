@@ -3,7 +3,6 @@ import path from "path";
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import multer from "multer";
 
 import Post from './models/post';
 import User from './models/user';
@@ -39,21 +38,8 @@ app.use(cors());
 //     console.log(response.getHeaders());
 //     next();
 // });
-app.use((request, response, next) => {
-    User.findByPk(1)
-        .then((user) => {
-            //@ts-ignore
-            request.user = user;
-            next();
-        })
-        .catch((error) => {
-            console.error(error);
-        })
-});
-
 app.use("/posts", postRoutes);
 app.use("/users", userRoutes);
-
 app.use("**", (request, response, next) => {
     response.status(404).json({
         message: "No such route exists"

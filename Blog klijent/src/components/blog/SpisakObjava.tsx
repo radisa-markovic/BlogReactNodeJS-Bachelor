@@ -6,6 +6,7 @@ import Paginacija from "../blog-alatke/Paginacija";
 import PretragaPoTagovima from "../blog-alatke/PretragaPoTagovima";
 import UnosSaPredlozima from "../UnosSaPredlozima";
 import PregledObjave from "./PregledObjave";
+import { Post } from "../../models/Post-refactor";
 
 interface Props
 {
@@ -13,8 +14,10 @@ interface Props
     prijavljenoKorisnickoIme: string
 }
 
-function SpisakObjava(props: Props): JSX.Element
-{
+const SpisakObjava: React.FC<Props> = (props: Props) => {
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const [objave, setObjave] = useState<Objava[]>([]);
     const [greska, setGreska] = useState<boolean>(false);
     const [podaciSeCekaju, setPodaciSeCekaju] = useState<boolean>(true);
@@ -26,38 +29,51 @@ function SpisakObjava(props: Props): JSX.Element
     const [odabraniTagovi, setOdabraniTagovi] = useState<Tag[]>([]);
     const [iskljuceniTagovi, setIskljuceniTagovi] = useState<Tag[]>([]);
 
-    useEffect(() => {
-        const naziviTagovaUString = spojiNaziveTagovaUString();
-        const naziviIskljucenihTagovaUString = spojiIskljuceneTagoveUString();
+    useEffect(() =>{
+        const posts_api = "http://localhost:3002/posts";
+        setIsLoading(true);
 
-        let urlZaObjave = `${OBJAVE_API}/6/${0*6}/-/true/`;
+        fetch(posts_api)
+            .then((response) => response.json())
+            .then((jsonResponse) => {
+                console.log(jsonResponse.posts);
+                setPosts(jsonResponse.posts);
+                setIsLoading(false);
+            })
+    }, []);
+
+    // useEffect(() => {
+    //     const naziviTagovaUString = spojiNaziveTagovaUString();
+    //     const naziviIskljucenihTagovaUString = spojiIskljuceneTagoveUString();
+
+    //     let urlZaObjave = `${OBJAVE_API}/6/${0*6}/-/true/`;
         
-        if(naziviTagovaUString !== "")
-        {
-            urlZaObjave += `?odabraniTagovi=${naziviTagovaUString}`;
-        }
+    //     if(naziviTagovaUString !== "")
+    //     {
+    //         urlZaObjave += `?odabraniTagovi=${naziviTagovaUString}`;
+    //     }
         
-        if(naziviIskljucenihTagovaUString !== "")
-        {
-            urlZaObjave += `?iskljuceniTagovi=${naziviIskljucenihTagovaUString}`;
-        }
-        /*=========== ako nemam odabrane tagove ===========*/
-        fetch(urlZaObjave)
-        .then((odgovor: Response) => {
-            if(!odgovor.ok)
-                throw odgovor;
+    //     if(naziviIskljucenihTagovaUString !== "")
+    //     {
+    //         urlZaObjave += `?iskljuceniTagovi=${naziviIskljucenihTagovaUString}`;
+    //     }
+    //     /*=========== ako nemam odabrane tagove ===========*/
+    //     fetch(urlZaObjave)
+    //     .then((odgovor: Response) => {
+    //         if(!odgovor.ok)
+    //             throw odgovor;
 
-            return odgovor.json();
-        })
-        .then((objave) => {
-            setObjave(objave);
-        })
-        .catch(greska => console.log(greska))
-        .finally(() => {
-            setPodaciSeCekaju(false);
-        });
+    //         return odgovor.json();
+    //     })
+    //     .then((objave) => {
+    //         setObjave(objave);
+    //     })
+    //     .catch(greska => console.log(greska))
+    //     .finally(() => {
+    //         setPodaciSeCekaju(false);
+    //     });
 
-    }, [odabraniTagovi, iskljuceniTagovi]);
+    // }, [odabraniTagovi, iskljuceniTagovi]);
 
     return(
         <main className="container">
@@ -66,11 +82,12 @@ function SpisakObjava(props: Props): JSX.Element
             <header>
                 <h2>Pretraži objave:</h2>
                 <div className="">
-                    <UnosSaPredlozima onChangeHandler={promenaUnosa} 
-                                      bindingPropertyName="naslov"
-                                      setPropertyName={setNaslovObjave}
-                                      urlPutanja={PRETRAZI_NASLOV_OBJAVE}
-                                      placeholder="Unesi naslov objave"
+                    <UnosSaPredlozima 
+                        onChangeHandler={promenaUnosa} 
+                        bindingPropertyName="naslov"
+                        setPropertyName={setNaslovObjave}
+                        urlPutanja={PRETRAZI_NASLOV_OBJAVE}
+                        placeholder="Unesi naslov objave"
                     />
                 </div>
                 <div>
@@ -88,14 +105,24 @@ function SpisakObjava(props: Props): JSX.Element
             </header>
             {/*=========== OVDE SE ISCRTAVAJU POJEDINACNE OBJAVE ===========*/}
             <div className="objava__spisak">
-                { nacrtajObjave() }
+                {/* { nacrtajObjave() } */}
+                {
+                    isLoading ? <p>Loading...</p>
+                    : posts.map((post) => 
+                        <PregledObjave 
+                            adminJePrijavljen={false}
+                            post={post}
+                            prijavljeniKorisnikNapisaoObjavu={false}
+                        />
+                        )
+                }
             </div>
-            <Paginacija brojElemenataPoStranici={6}
+            {/* <Paginacija brojElemenataPoStranici={6}
                         urlZaPaginaciju={OBJAVE_API}
                         korisnickoIme=""
                         najnovijePrvo={najnovijePrvo}
                         postaviElemente={setObjave}
-            />
+            /> */}
         </main>
     );
 
@@ -113,21 +140,21 @@ function SpisakObjava(props: Props): JSX.Element
         }
     }
 
-    function nacrtajObjave(): JSX.Element | JSX.Element[]
-    {       
-        if(!podaciSeCekaju && objave.length === 0)
-            return <p>Nema nijedne objave</p>;
-        else
-            return objave.map((objava, indeks) => {
-                return <PregledObjave objava={objava} 
-                                      adminJePrijavljen={props.adminJePrijavljen}
-                                      key={indeks} 
-                                      setObjave={setObjave}
-                                      setOdabraniTag={setOdabraniTag}
-                                      prijavljeniKorisnikNapisaoObjavu={objava.korisnickoIme === props.prijavljenoKorisnickoIme}
-                        />
-            });
-    }
+    // function nacrtajObjave(): JSX.Element | JSX.Element[]
+    // {       
+    //     if(!isLoading && posts.length === 0)
+    //         return <p>Nema nijedne objave</p>;
+    //     else
+    //         return posts.map((objava, indeks) => {
+    //             return <PregledObjave objava={objava} 
+    //                                   adminJePrijavljen={props.adminJePrijavljen}
+    //                                   key={indeks} 
+    //                                   setObjave={setObjave}
+    //                                   setOdabraniTag={setOdabraniTag}
+    //                                   prijavljeniKorisnikNapisaoObjavu={objava.korisnickoIme === props.prijavljenoKorisnickoIme}
+    //                     />
+    //         });
+    // }
 
     function prikaziObjavePodTagom(odabraniTag: string): JSX.Element
     {

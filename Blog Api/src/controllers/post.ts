@@ -9,13 +9,20 @@ import Reaction from "../models/reaction";
 export const getPosts = async (request: Request, response: Response, next: NextFunction) => {
     const errors = validationResult(request);
 
-    // console.log(errors);
-
     if(errors.isEmpty())
     {
         try
         {
-            const result = await Post.findAll();
+            const result = await Post.findAll({
+                attributes: { 
+                    exclude: ['userId'] 
+                },
+                include:
+                {
+                    model: User,
+                    attributes: ['id', 'username']
+                }
+            });
             return response.status(200).json({
                 posts: result
             });
@@ -40,10 +47,10 @@ export const getPosts = async (request: Request, response: Response, next: NextF
 }
 
 export const addPost = async (request: Request, response: Response, next: NextFunction) => {
-    // const errors = validationResult(request);
+    const errors = validationResult(request);
 
-    // if(errors.isEmpty())
-    // {
+    if(errors.isEmpty())
+    {
         const { 
             title, 
             description, 
@@ -51,11 +58,19 @@ export const addPost = async (request: Request, response: Response, next: NextFu
             userId
          } = request.body as any;
         const coverImageUrl = request.file!.path; 
+        console.group();
+            console.log(title);
+            console.log(description);
+            console.log(content);
+            console.log(userId);
+            console.log(coverImageUrl);
+        console.groupEnd();
 
         try
         {
+            const user = await User.findByPk(userId);
             //@ts-ignore
-            await request.user.createPost({
+            await user.createPost({
                 title: title,
                 description: description,
                 content: content,
@@ -75,9 +90,9 @@ export const addPost = async (request: Request, response: Response, next: NextFu
             }
             next(error);
         }
-    // }
-    // else
-    // {
+    }
+    else
+    {
         /**
          * errors: {
          *     title: 'The title is too short',
@@ -86,31 +101,34 @@ export const addPost = async (request: Request, response: Response, next: NextFu
          *     content: 'Content is missing'
          * }
          */
-    //     const formattedError = errors.formatWith((error) => {
-    //         return {
-    //             [(error as FieldValidationError).path]: (error as FieldValidationError).msg
-    //         }
-    //     });
-    //     response.status(422).json({
-    //         message: "Validation failed",
-    //         errors: formattedError.array()
-    //     });
-    // }
+        // const formattedError = errors.formatWith((error) => {
+        //     return {
+        //         [(error as FieldValidationError).path]: (error as FieldValidationError).msg
+        //     }
+        // });
+        response.status(422).json({
+            message: "Validation failed",
+            errors: errors.array()
+        });
+    }
 }
 
 export const getPost = async (request: Request, response: Response, next: NextFunction) => {
     const { postId } = request.params;
     try
     {
-        const result = await Post.findByPk(postId, { 
-            include: [
-                {
-                    model: Comment,
-                    required: true,
-                    include: [User]
-                }
-            ] 
-        });
+        // const result = await Post.findByPk(postId, { 
+        //     include: [
+        //         {
+        //             model: Comment,
+        //             required: true,
+        //             include: [User]
+        //         }
+        //     ] 
+        // });
+        const result = await Post.findByPk(postId);
+        console.log(result);
+
         if(!result)
         {
             return response.status(404).json({

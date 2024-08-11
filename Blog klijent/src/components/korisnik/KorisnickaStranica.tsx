@@ -108,9 +108,9 @@ export default function KorisnickaStanica(props: Props): JSX.Element
                     Objave korisnika: {korisnickoIme}
                 </h1>
             </header>
-            <div className="objava__spisak">
+            {/* <div className="objava__spisak">
                 { nacrtajSopstveneObjave() }
-            </div>
+            </div> */}
             <Paginacija urlZaPaginaciju={OBJAVE_API} 
                         brojElemenataPoStranici={6} 
                         korisnickoIme={korisnickoIme}
@@ -125,18 +125,18 @@ export default function KorisnickaStanica(props: Props): JSX.Element
         return props.korisnik.korisnickoIme === korisnickoIme;//ovo desno je iz putanje
     }
 
-    function nacrtajSopstveneObjave(): JSX.Element | JSX.Element[]
-    {
-        if(sopstveneObjave.length === 0)
-            return (<p>Nema dislajkovanih objava</p>);
-        else
-            return(
-                sopstveneObjave.map((mojaObjava, indeks) => {
-                    return <PregledObjave objava={mojaObjava} 
-                            adminJePrijavljen={props.adminJePrijavljen}
-                            prijavljeniKorisnikNapisaoObjavu={mojaObjava.korisnickoIme === props.korisnik.korisnickoIme} />
-                })
-            );
+    // function nacrtajSopstveneObjave(): JSX.Element | JSX.Element[]
+    // {
+    //     if(sopstveneObjave.length === 0)
+    //         return (<p>Nema dislajkovanih objava</p>);
+    //     else
+    //         return(
+    //             sopstveneObjave.map((mojaObjava, indeks) => {
+    //                 return <PregledObjave objava={mojaObjava} 
+    //                         adminJePrijavljen={props.adminJePrijavljen}
+    //                         prijavljeniKorisnikNapisaoObjavu={mojaObjava.korisnickoIme === props.korisnik.korisnickoIme} />
+    //             })
+    //         );
     
-    }
+    // }
 }

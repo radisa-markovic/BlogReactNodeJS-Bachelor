@@ -6,7 +6,7 @@ import { checkJwt } from '../middleware/jwtAuth';
 
 const router = Router();
 
-router.get("/", checkJwt, postController.getPosts);
+router.get("/", postController.getPosts);
 router.get(
     "/:postId", 
     postValidator.validateId(),
@@ -14,8 +14,8 @@ router.get(
 );
 router.post(
     "/create", 
-    // checkJwt,
-    // postValidator.validatePost(),
+    checkJwt,
+    postValidator.validatePost(),
     postController.addPost
 );
 router.patch(

@@ -82,8 +82,14 @@ function App() {
           />
         </Route>
         {/*ovo treba da se sredi u smislu naziva komponente i tome slicno*/}
-        <Route exact path="/objava/:id">
+        {/* <Route exact path="/objava/:id">
           <PunaObjava prijavljeniKorisnik={korisnik}/>
+        </Route> */}
+        <Route exact path="/post/:id">
+          <NapisiObjavu 
+              accessToken={accessToken}
+              userData={userData}
+          />
         </Route>
         <Route exact path="/objaveKorisnika/:korisnickoIme">
           <KorisnickaStanica 

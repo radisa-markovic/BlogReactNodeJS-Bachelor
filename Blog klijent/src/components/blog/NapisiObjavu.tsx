@@ -16,6 +16,10 @@ import { EditorState, ContentState, convertToRaw, convertFromHTML } from 'draft-
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";  
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
+import { validatePost } from "../../validators/Post";
+import FormError from "../FormError";
+import { useLocation } from "react-router-dom";
+import { Post } from "../../models/Post-refactor";
 
 
 interface NovaObjava
@@ -65,34 +69,102 @@ const NapisiObjavu: React.FC<PostProps> = ({
     userData
 }) => {
     const [title, setTitle] = useState<string>('');
+    const [titleError, setTitleError] = useState<string>('');
+
     const [description, setDescription] = useState<string>('');
+    const [descriptionError, setDescriptionError] = useState<string>('');
+
     const [content, setContent] = useState<string>('');
+    const [contentError, setContentError] = useState<string>('');
+
     const [coverImage, setCoverImage] = useState<File | null>(null);
+    const [coverImageError, setCoverImageError] = useState<string>('');
+
+    const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
 
     const history = useHistory();
+    const { id } = useParams<{id: string}>();
+    const { search } = useLocation();
+
+    const isEditMode: boolean = new URLSearchParams(search).get("edit") === "true"? true: false;
+
+    useEffect(() => {
+        if(id)
+        {
+            fetch("http://localhost:3002/posts/" + id)
+                .then((response) => response.json())
+                .then((jsonResponse: {message: string, post: Post, OP: any}) => {
+                    setTitle(jsonResponse.post.title);
+                    setDescription(jsonResponse.post.description);
+                    setContent(jsonResponse.post.content);
+                    setCoverImageUrl(jsonResponse.post.coverImageUrl);
+                })
+                .catch(error => console.log(error));
+        }
+    }, []);
+    
+    // useEffect(() => {
+    //     // console.log(search);
+    //     console.log(new URLSearchParams(search).get("edit"));
+    // }, []);
 
     const createPost = async () => {
         const new_post_api = "http://localhost:3002/posts/create";
+        setTitleError('');
+        setDescriptionError('');
+        setContentError('');
+        setCoverImageError('');
 
-        const formData = new FormData();
-        formData.append("title", title);
-        formData.append("description", description);
-        formData.append("content", content);
-        formData.append('userId', userData.id.toString());
-        // if(coverImage)
-        formData.append("coverImage", coverImage!);
+        const validationErrors = validatePost({
+            title,
+            description,
+            content,
+            coverImage
+        });
 
-        const request: RequestInit = {
-            headers: {
-                "Authorization": "Bearer " + accessToken
-            },
-            method: "POST",
-            // mode: 'cors',
-            body: formData
-        };
-        
-        const response = await fetch(new_post_api, request);
-        console.log(response);
+        if(validationErrors.errorsExist)
+        {
+            if(validationErrors.titleError && validationErrors.titleError !== '')
+                setTitleError(validationErrors.titleError);
+    
+            if(validationErrors.descriptionError && validationErrors.descriptionError !== '')
+                setDescriptionError(validationErrors.descriptionError);
+    
+            if(validationErrors.contentError && validationErrors.contentError !== '')
+                setContentError(validationErrors.contentError)
+    
+            if(validationErrors.coverImageError && validationErrors.coverImageError !== '')
+                setCoverImageError(validationErrors.coverImageError)
+        }
+        else
+        {
+            const formData = new FormData();
+            formData.append("title", title);
+            formData.append("description", description);
+            formData.append("content", content);
+            formData.append('userId', userData.id.toString());
+            formData.append("coverImage", coverImage!);
+    
+            const request: RequestInit = {
+                headers: {
+                    "Authorization": "Bearer " + accessToken
+                },
+                method: "POST",
+                // mode: 'cors',
+                body: formData
+            };
+            
+            const response = await fetch(new_post_api, request);
+            console.log(response);
+            if(response.status === 401)
+            {
+                console.log(accessToken);
+                alert("Not authorized to post");
+            }
+            const jsonResponse = await response.json();
+            console.log(jsonResponse);
+            history.push("/sveObjave");
+        }        
     }
 
     /*za edit*/
@@ -173,32 +245,97 @@ const NapisiObjavu: React.FC<PostProps> = ({
 
     return (
         <main className="objava container donja-margina-potomci">
-            <h1 className="objava__naslov">
-                Naslov:
-                <input 
-                    type="text"
-                    className="kontrola" 
-                    placeholder="Naslov"
-                    name="naslov"
-                    onChange={({target}) => setTitle(target.value)}
-                    // value={objava.naslov}
-                    required
-                /> 
-            </h1>
+            {
+                isEditMode
+                ?
+                <form>
+                    <div>
+                        {
+                            coverImageError !== '' &&
+                            <FormError errorText={coverImageError} />
+                        }
+                        <img 
+                            src={coverImage? URL.createObjectURL(coverImage) : '' } 
+                            alt="" 
+                        />
+                        <label htmlFor="" style={{fontSize: '16px'}}>
+                            Naslovna fotografija
+                        </label>
+                        <input 
+                            type="file" 
+                            name="coverImageInput" 
+                            id="coverImageInput" 
+                            accept=".jpg, .jpeg, .png"
+                            onChange={({target}) => setCoverImage(target.files && target.files[0])}
+                        />
+                    </div>
+                    <div>
+                        {
+                            titleError !== '' &&
+                            <FormError errorText={titleError} />
+                        }
+                        <label style={{fontSize: '16px'}}>
+                            Naslov:
+                        </label>
+                        <input 
+                            type="text"
+                            className="kontrola" 
+                            placeholder="Naslov"
+                            name="naslov"
+                            onChange={({target}) => setTitle(target.value)}
+                            value={title}
+                            required
+                        />
+                    </div>
+                    <div>
+                        {
+                            descriptionError !== '' &&
+                            <FormError errorText={descriptionError} />
+                        }
+                        <label htmlFor="" style={{fontSize: '16px'}}>
+                            Kratak opis
+                        </label>
+                        <input 
+                            type="text"
+                            className="kontrola" 
+                            placeholder="Kratak opis"
+                            name="kratakOpis"
+                            onChange={({target}) => setDescription(target.value)}
+                            value={description}
+                        /> 
+                    </div>
+                    <div>
+                        <textarea 
+                            name="content" 
+                            id="content"
+                            style={{
+                                fontSize: '16px'
+                            }}
+                            onChange={({target}) => setContent(target.value)}
+                        >{content}</textarea>
+                    </div>
+                </form>
+                :
+                <article>
+                    <div>
+                        <img src={coverImageUrl? coverImageUrl : ''} alt="" />
+                    </div>
+                    <h1>
+                        { title }
+                    </h1>
+                    <h2 className="objava__naslov">
+                        { description }
+                    </h2>
+                    <div style={{fontSize: '16px'}}>
+                        { content }
+                    </div>
+                </article>
+            }
             {/* fotografija naslovna*/}
             <div className="objava__naslov">
-                <h2>Naslovna fotografija:</h2>
-                <img 
-                    src={coverImage? URL.createObjectURL(coverImage) : '' } 
-                    alt="" 
-                />
-                <input 
-                    type="file" 
-                    name="coverImageInput" 
-                    id="coverImageInput" 
-                    accept=".jpg, .jpeg, .png"
-                    onChange={({target}) => setCoverImage(target.files && target.files[0])}
-                />
+                {/* <h2>Naslovna fotografija:</h2> */}
+                
+                
                 {/* <img src={objava.URLNaslovneSlike} alt="Nema slike" /> */}
                 {/* <UnosSlike 
                     slikaJeNaslovna={true}
@@ -206,31 +343,6 @@ const NapisiObjavu: React.FC<PostProps> = ({
                     postaviSlikeSaBloga={setSlikeUPasusima}
                     urlStareSlike={objava.URLNaslovneSlike}
                 /> */}
-            </div>
-            <h2 className="objava__naslov">
-                Kratak opis:
-                <input 
-                    type="text"
-                    className="kontrola" 
-                    placeholder="Kratak opis"
-                    name="kratakOpis"
-                    onChange={({target}) => setDescription(target.value)}
-                    // value={objava.kratakOpis}
-                    required
-                /> 
-            </h2>
-            <div>
-                <h3>
-                    Sadržaj:
-                </h3>
-                <textarea 
-                    name="content" 
-                    id="content"
-                    style={{
-                        fontSize: '16px'
-                    }}
-                    onChange={({target}) => setContent(target.value)}
-                ></textarea>
             </div>
             {/* <Editor
                 editorState={editorState}

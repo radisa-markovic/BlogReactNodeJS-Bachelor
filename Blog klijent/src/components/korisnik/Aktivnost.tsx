@@ -98,7 +98,7 @@ function Aktivnost(korisnik: Props): JSX.Element
             <section className="korisnikovi-komentari">
                 <h2>Vaši komentari: </h2>
                 <ul>
-                    { nacrtajKorisnikoveKomentare() }
+                    {/* { nacrtajKorisnikoveKomentare() } */}
                 </ul>
             </section>
             
@@ -106,84 +106,84 @@ function Aktivnost(korisnik: Props): JSX.Element
             <section className="lajkovani-postovi">
                 <h2>Lajkovani postovi: </h2>
                 <div className="objava__spisak">
-                    { nacrtajLajkovaneObjave() }
+                    {/* { nacrtajLajkovaneObjave() } */}
                 </div>
             </section>
             
             <input type="radio" name="aktivnost-dugme" id="aktivnost-dugme--dislajkovani-postovi" />
             <section className="lajkovani-postovi">
                 <h2>Dislajkovani postovi: </h2>
-                <div className="objava__spisak">
+                {/* <div className="objava__spisak">
                     { nacrtajDislajkovaneObjave() }
-                </div>
+                </div> */}
             </section>
             
             <input type="radio" name="aktivnost-dugme" id="aktivnost-dugme--moje-objave" />
             <section className="lajkovani-postovi">
                 <h2>Moje objave: </h2>
-                <div className="objava__spisak">
+                {/* <div className="objava__spisak">
                     { nacrtajKorisnikoveObjave() }
-                </div>
+                </div> */}
             </section>
         </main>
     );
 
-    function nacrtajKorisnikoveKomentare(): JSX.Element[]
-    {
-        return(
-            komentari.map((komentar, indeks) => {
-                return(
-                    <li key={indeks}>
-                        <h3>Naslov objave: <strong>{komentar.naslov}</strong></h3>
-                        <p>
-                            Vaš komentar: {komentar.komentar}
-                        </p>
-                    </li>)
-            })
-        );
-    }
+    // function nacrtajKorisnikoveKomentare(): JSX.Element[]
+    // {
+    //     return(
+    //         komentari.map((komentar, indeks) => {
+    //             return(
+    //                 <li key={indeks}>
+    //                     <h3>Naslov objave: <strong>{komentar.naslov}</strong></h3>
+    //                     <p>
+    //                         Vaš komentar: {komentar.komentar}
+    //                     </p>
+    //                 </li>)
+    //         })
+    //     );
+    // }
 
-    function nacrtajLajkovaneObjave(): JSX.Element | JSX.Element[]
-    {
-        if(lajkovaneObjave.length === 0)
-            return (<p>Nema lajkovanih objava</p>);
-        else
-            return(
-                lajkovaneObjave.map((lajkovanaObjava, indeks) => {
-                    return <PregledObjave objava={lajkovanaObjava} 
-                                          adminJePrijavljen={korisnik.korisnik.adminStatus}
-                                          prijavljeniKorisnikNapisaoObjavu={lajkovanaObjava.korisnickoIme === korisnik.korisnik.korisnickoIme}/>
-                })
-            );
-    }
+    // function nacrtajLajkovaneObjave(): JSX.Element | JSX.Element[]
+    // {
+    //     if(lajkovaneObjave.length === 0)
+    //         return (<p>Nema lajkovanih objava</p>);
+    //     else
+    //         return(
+    //             lajkovaneObjave.map((lajkovanaObjava, indeks) => {
+    //                 return <PregledObjave objava={lajkovanaObjava} 
+    //                                       adminJePrijavljen={korisnik.korisnik.adminStatus}
+    //                                       prijavljeniKorisnikNapisaoObjavu={lajkovanaObjava.korisnickoIme === korisnik.korisnik.korisnickoIme}/>
+    //             })
+    //         );
+    // }
 
-    function nacrtajDislajkovaneObjave(): JSX.Element | JSX.Element[]
-    {
-        if(dislajkovaneObjave.length === 0)
-            return (<p>Nema dislajkovanih objava</p>);
-        else
-            return(
-                dislajkovaneObjave.map((dislajkovanaObjava, indeks) => {
-                    return <PregledObjave objava={dislajkovanaObjava} 
-                                          adminJePrijavljen={korisnik.korisnik.adminStatus} 
-                                          prijavljeniKorisnikNapisaoObjavu={dislajkovanaObjava.korisnickoIme === korisnik.korisnik.korisnickoIme}/>
-                })
-            );
-    }
+    // function nacrtajDislajkovaneObjave(): JSX.Element | JSX.Element[]
+    // {
+    //     if(dislajkovaneObjave.length === 0)
+    //         return (<p>Nema dislajkovanih objava</p>);
+    //     else
+    //         return(
+    //             dislajkovaneObjave.map((dislajkovanaObjava, indeks) => {
+    //                 return <PregledObjave objava={dislajkovanaObjava} 
+    //                                       adminJePrijavljen={korisnik.korisnik.adminStatus} 
+    //                                       prijavljeniKorisnikNapisaoObjavu={dislajkovanaObjava.korisnickoIme === korisnik.korisnik.korisnickoIme}/>
+    //             })
+    //         );
+    // }
 
-    function nacrtajKorisnikoveObjave(): JSX.Element | JSX.Element[]
-    {
-        if(mojeObjave.length === 0)
-            return (<p>Nema dislajkovanih objava</p>);
-        else
-            return(
-                mojeObjave.map((mojaObjava, indeks) => {
-                    return <PregledObjave objava={mojaObjava}
-                                          adminJePrijavljen={korisnik.korisnik.adminStatus} 
-                                          prijavljeniKorisnikNapisaoObjavu={true}/>
-                })
-            );
-    }
+    // function nacrtajKorisnikoveObjave(): JSX.Element | JSX.Element[]
+    // {
+    //     if(mojeObjave.length === 0)
+    //         return (<p>Nema dislajkovanih objava</p>);
+    //     else
+    //         return(
+    //             mojeObjave.map((mojaObjava, indeks) => {
+    //                 return <PregledObjave objava={mojaObjava}
+    //                                       adminJePrijavljen={korisnik.korisnik.adminStatus} 
+    //                                       prijavljeniKorisnikNapisaoObjavu={true}/>
+    //             })
+    //         );
+    // }
 }
 
 export default Aktivnost;

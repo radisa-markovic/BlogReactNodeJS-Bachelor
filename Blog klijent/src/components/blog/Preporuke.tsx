@@ -30,21 +30,21 @@ export default function Preporuke(props: Props): JSX.Element
         <aside className="container preporuke">
             <h2>{ upisiNaslovPreporuka() }</h2>
             <div className="preporuke__holder" style={{ "--broj-preporuka-u-vrsti": props.preporukaUVrsti } as React.CSSProperties }>
-                { nacrtajClanke() }
+                {/* { nacrtajClanke() } */}
             </div>
         </aside>
     );
 
-    function nacrtajClanke(): JSX.Element[]
-    {
-        return clanci.map((clanak, indeks) => {
-            return <PregledObjave objava={clanak} 
-                                  key={indeks} 
-                                  adminJePrijavljen={false} /*<--- hard flag, lenj sam da popravljam*/
-                                  prijavljeniKorisnikNapisaoObjavu={clanak.korisnickoIme === props.prijavljenoKorisnickoIme}
-                   />
-        })
-    }
+    // function nacrtajClanke(): JSX.Element[]
+    // {
+    //     return clanci.map((clanak, indeks) => {
+    //         return <PregledObjave objava={clanak} 
+    //                               key={indeks} 
+    //                               adminJePrijavljen={false} /*<--- hard flag, lenj sam da popravljam*/
+    //                               prijavljeniKorisnikNapisaoObjavu={clanak.korisnickoIme === props.prijavljenoKorisnickoIme}
+    //                />
+    //     })
+    // }
 
     function upisiNaslovPreporuka(): string
     {

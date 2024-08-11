@@ -1,4 +1,5 @@
 import { param, body, ValidationChain } from 'express-validator';
+import User from '../models/user';
 
 const MINIMAL_TITLE_LENGTH: number = 2;
 const MINIMAL_DESCRIPTION_LENGTH: number = 2;
@@ -31,8 +32,25 @@ export const validatePost = (): ValidationChain[] => {
             .isString()
             .isLength({min: MINIMAL_CONTENT_LENGTH})
             .withMessage("Content must be at least two characters long"),
-        // body('coverImageUrl')
-        //     .isURL()
-        //     .withMessage("Image link URL is malformed or not found")
+        body('userId')
+            .trim()
+            .exists()
+            .withMessage("No user id provided")
+            .custom(async (userId) => {
+                const user = await User.findByPk(userId);
+                if(!user)
+                    throw new Error('User with given id not found')
+            }),
+        body('coverImage')
+            .exists()
+            .custom((value, { req }) => {
+                if(
+                    req.file.mimetype !== "image/jpeg" ||
+                    req.file.mimetype !== "image/jpg" ||
+                    req.file.mimetype !== "image/png"
+                )
+                    throw new Error('Proper image file type not provided. Provide jpeg, jpg or png');
+            })
+            .withMessage("Image error")
     ];
 }
