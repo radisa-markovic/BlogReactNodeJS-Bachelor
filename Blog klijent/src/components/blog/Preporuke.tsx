@@ -3,7 +3,7 @@ import { VRARTI_PREPORUCENE_CLANKE } from "../../ApiPutanje";
 import { Objava } from "../../models/Objava";
 import { TipoviPreporuka } from "../../models/TipoviPreporuka";
 import { uputiPoziv } from "../../ServisneStvari";
-import PregledObjave from "./PregledObjave";
+import PregledObjave from "./PostPreviewCard";
 
 interface Props
 {

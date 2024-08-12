@@ -1,9 +1,16 @@
-import { param, body, ValidationChain } from 'express-validator';
+import { param, body, ValidationChain, query } from 'express-validator';
 import User from '../models/user';
 
 const MINIMAL_TITLE_LENGTH: number = 2;
 const MINIMAL_DESCRIPTION_LENGTH: number = 2;
 const MINIMAL_CONTENT_LENGTH: number = 2;
+
+export const validateGetPosts = (): ValidationChain => {
+    return query('date')
+        .optional()
+        .not()
+        .isArray()
+}
 
 export const validateId = (): ValidationChain => {
     return param('postId')

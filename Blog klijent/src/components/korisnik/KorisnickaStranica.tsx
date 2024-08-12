@@ -6,8 +6,8 @@ import { Objava } from "../../models/Objava";
 import { uputiPoziv } from "../../ServisneStvari";
 import NoviUnosSlike from "../blog-alatke/NoviUnosSlike";
 import Paginacija from "../blog-alatke/Paginacija";
-import PregledObjave from "../blog/PregledObjave";
-import SpisakObjava from "../blog/SpisakObjava";
+import PregledObjave from "../blog/PostPreviewCard";
+import SpisakObjava from "../blog/PostList";
 
 interface Props
 {

@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import NapisiObjavu from './components/blog/NapisiObjavu';
-import SpisakObjava from './components/blog/SpisakObjava';
+import SpisakObjava from './components/blog/PostList';
 import Home from './components/Home';
 import NapraviNalog from './components/korisnik/NapraviNalog';
 import Navbar from './components/Navbar';
@@ -16,6 +16,7 @@ import NapisiPoruku from './components/poruke/NapisiPoruku';
 import { BanovaniKorisnikPrikaz } from './components/korisnik/BanovaniKorisnikPrikaz';
 import KorisnickaStanica from './components/korisnik/KorisnickaStranica';
 import { PretplataNaBlog } from './components/PretplataNaBlog';
+import PostList from './components/blog/PostList';
 
 function App() {
   const [korisnik, setKorisnik] = useState<Korisnik>({
@@ -76,7 +77,7 @@ function App() {
           <NapisiObjavu prijavljeniKorisnik={korisnik}/>
         </Route> */}
         <Route exact path="/sveObjave">
-          <SpisakObjava 
+          <PostList 
               adminJePrijavljen={korisnik.adminStatus} 
               prijavljenoKorisnickoIme={korisnik.korisnickoIme}
           />

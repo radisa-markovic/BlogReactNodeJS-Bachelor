@@ -13,6 +13,12 @@ export const getPosts = async (request: Request, response: Response, next: NextF
     {
         try
         {
+            let dateSortOrder = request.query.date;
+            //@ts-ignore
+            if(dateSortOrder !== 'ASC' && dateSortOrder !== 'DESC')
+                dateSortOrder = 'DESC';
+            console.log(dateSortOrder);
+
             const result = await Post.findAll({
                 attributes: { 
                     exclude: ['userId'] 
@@ -21,7 +27,10 @@ export const getPosts = async (request: Request, response: Response, next: NextF
                 {
                     model: User,
                     attributes: ['id', 'username']
-                }
+                },
+                order: [
+                    ['createdAt', dateSortOrder]
+                ]
             });
             return response.status(200).json({
                 posts: result

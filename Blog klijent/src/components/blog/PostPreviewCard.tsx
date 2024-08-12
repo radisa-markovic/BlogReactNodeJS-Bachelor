@@ -5,32 +5,7 @@ import { Objava } from "../../models/Objava";
 import { uputiPoziv } from "../../ServisneStvari";
 import { Post } from "../../models/Post-refactor";
 
-/*mozda imam jednu komponentu za objavu, i jedan boolean parametar koji kaze da ide kompaktan prikaz,
-ili onaj ceo, videcu*/
-interface Props
-{
-    post: Post,
-    adminJePrijavljen: boolean,
-    prijavljeniKorisnikNapisaoObjavu: boolean,
-    setObjave?: React.Dispatch<React.SetStateAction<Objava[]>>,
-    setOdabraniTag?: React.Dispatch<React.SetStateAction<string>>
-}
-
-const PregledObjave: FC<Props> = (props) => {    
-    // const { 
-    //     naslov, 
-    //     kratakOpis,
-    //     id_autora, 
-    //     korisnickoIme,
-    //     sadrzaj, 
-    //     tagovi, 
-    //     id,
-    //     brojKomentara,
-    //     brojLajkova,
-    //     brojDislajkova,
-    //     URLNaslovneSlike,
-    //     datumPisanja,
-    // } = props.objava;
+const PostPreviewCard: React.FC<{post:Post}> = (props) => {
     const {
         id,
         title,
@@ -43,11 +18,6 @@ const PregledObjave: FC<Props> = (props) => {
 
     return(
         <article className="objava__pregled donja-margina-potomci">
-            {/* { 
-                props.prijavljeniKorisnikNapisaoObjavu &&
-                nacrtajKomandeZaPrijavljenogKorisnika()
-            }
-            { props.adminJePrijavljen && nacrtajAdminoveKontrole() } */}
             <div className="drzac-slike">
                 <img 
                     src={coverImageUrl} 
@@ -71,41 +41,110 @@ const PregledObjave: FC<Props> = (props) => {
                 </p>
                 <h3 className="objava__autor">
                     <i>Napisao:</i> { user.username }
-                    {/* <Link to={`/objaveKorisnika/${korisnickoIme}`} 
-                        className="link-za-korisnicku-stranicu"
-                    >
-                        { korisnickoIme }
-                    </Link> */}
                 </h3>
             </header>
             <Link to={`/post/${id}`} className="objava__procitaj-celu">
                 Pročitaj celu objavu
             </Link>
-            {/* <ul className="objava__reakcije">
-                <li className="objava__reakcija-holder">
-                    <i className="fas fa-thumbs-up"></i>
-                    { brojLajkova? brojLajkova : 0 }
-                </li>
-                <li className="objava__reakcija-holder">
-                    <i className="fas fa-thumbs-down"></i>
-                    { brojDislajkova? brojDislajkova : 0 }
-                </li>
-                <li className="objava__reakcija-holder">
-                    <i className="fas fa-comment"></i>
-                    { brojKomentara? brojKomentara : 0  }
-                </li>
-            </ul> */}
-            {/* <p>
-                <i className="fas fa-comment"></i>
-                Broj komentara: { brojKomentara? brojKomentara : 0  }
-            </p>
-            <p>Broj lajkova: { brojLajkova? brojLajkova : 0 }</p>
-            <p>Broj dislajkova: { brojDislajkova? brojDislajkova : 0 }</p> */}
-            {/* <nav className="objava__tagovi">
-                { tagovi && nacrtajTagove() }
-            </nav> */}
         </article>       
     );
+}
+
+export default PostPreviewCard;
+
+/*mozda imam jednu komponentu za objavu, i jedan boolean parametar koji kaze da ide kompaktan prikaz,
+ili onaj ceo, videcu*/
+// interface Props
+// {
+//     post: Post,
+//     adminJePrijavljen: boolean,
+//     prijavljeniKorisnikNapisaoObjavu: boolean,
+//     setObjave?: React.Dispatch<React.SetStateAction<Objava[]>>,
+//     setOdabraniTag?: React.Dispatch<React.SetStateAction<string>>
+// }
+
+// const PregledObjave: FC<Props> = (props) => {    
+    // const { 
+    //     naslov, 
+    //     kratakOpis,
+    //     id_autora, 
+    //     korisnickoIme,
+    //     sadrzaj, 
+    //     tagovi, 
+    //     id,
+    //     brojKomentara,
+    //     brojLajkova,
+    //     brojDislajkova,
+    //     URLNaslovneSlike,
+    //     datumPisanja,
+    // } = props.objava;
+    
+
+    // return(
+    //     <article className="objava__pregled donja-margina-potomci">
+    //         {/* { 
+    //             props.prijavljeniKorisnikNapisaoObjavu &&
+    //             nacrtajKomandeZaPrijavljenogKorisnika()
+    //         }
+    //         { props.adminJePrijavljen && nacrtajAdminoveKontrole() } */}
+    //         <div className="drzac-slike">
+    //             <img 
+    //                 src={coverImageUrl} 
+    //                 alt="" 
+    //                 width={245}
+    //                 height={245}
+    //                 loading="lazy"
+    //             />
+    //         </div>
+    //         <header className="objava__header container">
+    //             <h2 className="objava__naslov">
+    //                 <Link to={`/objava/${id}`} className="objava__procitaj-celu">
+    //                     { title }
+    //                 </Link>
+    //             </h2>
+    //             <time className="objava__datum-pisanja">
+    //                 { createdAt }
+    //             </time>
+    //             <p className="objava__kratak-opis">
+    //                 { description }
+    //             </p>
+    //             <h3 className="objava__autor">
+    //                 <i>Napisao:</i> { user.username }
+    //                 {/* <Link to={`/objaveKorisnika/${korisnickoIme}`} 
+    //                     className="link-za-korisnicku-stranicu"
+    //                 >
+    //                     { korisnickoIme }
+    //                 </Link> */}
+    //             </h3>
+    //         </header>
+    //         <Link to={`/post/${id}`} className="objava__procitaj-celu">
+    //             Pročitaj celu objavu
+    //         </Link>
+    //         {/* <ul className="objava__reakcije">
+    //             <li className="objava__reakcija-holder">
+    //                 <i className="fas fa-thumbs-up"></i>
+    //                 { brojLajkova? brojLajkova : 0 }
+    //             </li>
+    //             <li className="objava__reakcija-holder">
+    //                 <i className="fas fa-thumbs-down"></i>
+    //                 { brojDislajkova? brojDislajkova : 0 }
+    //             </li>
+    //             <li className="objava__reakcija-holder">
+    //                 <i className="fas fa-comment"></i>
+    //                 { brojKomentara? brojKomentara : 0  }
+    //             </li>
+    //         </ul> */}
+    //         {/* <p>
+    //             <i className="fas fa-comment"></i>
+    //             Broj komentara: { brojKomentara? brojKomentara : 0  }
+    //         </p>
+    //         <p>Broj lajkova: { brojLajkova? brojLajkova : 0 }</p>
+    //         <p>Broj dislajkova: { brojDislajkova? brojDislajkova : 0 }</p> */}
+    //         {/* <nav className="objava__tagovi">
+    //             { tagovi && nacrtajTagove() }
+    //         </nav> */}
+    //     </article>       
+    // );
 
     // function nacrtajTagove(): JSX.Element[]
     // {/*====== jedino treba da se vidi dal se ovde stavlja button, ili neki Link
@@ -196,6 +235,6 @@ const PregledObjave: FC<Props> = (props) => {
     //         </div>
     //     );
     // }
-}
+// }
 
-export default PregledObjave;
+// export default PregledObjave;

@@ -4,7 +4,7 @@ import { Komentar } from "../../models/Komentar";
 import { Korisnik } from "../../models/Korisnik";
 import { Objava } from "../../models/Objava";
 import { uputiPoziv } from "../../ServisneStvari";
-import PregledObjave from "../blog/PregledObjave";
+import PregledObjave from "../blog/PostPreviewCard";
 
 interface Props
 {

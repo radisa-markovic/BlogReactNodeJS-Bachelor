@@ -1,6 +1,6 @@
 import { TipoviPreporuka } from "../models/TipoviPreporuka";
 import Preporuke from "./blog/Preporuke";
-import SpisakObjava from "./blog/SpisakObjava";
+import SpisakObjava from "./blog/PostList";
 
 function Home(): JSX.Element
 {
