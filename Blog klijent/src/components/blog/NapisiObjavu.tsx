@@ -3,7 +3,7 @@ import { useHistory, useParams } from "react-router";
 import { AZURIRAJ_OBJAVU, DODAJ_NOVI_TAG, NAPRAVI_OBJAVU, OSNOVNI_PUT, SVI_TAGOVI } from "../../ApiPutanje";
 import { Korisnik } from "../../models/Korisnik";
 import { Objava } from "../../models/Objava";
-import { Tag } from "../../models/Tag";
+import { Tag } from "../../models/Tag.refactor";
 import { TipoviPasusa } from "../../models/TipoviPasusa";
 import { upakujZahtev, uputiPoziv } from "../../ServisneStvari";
 import Pasus from "../blog-alatke/Pasus";
@@ -82,11 +82,14 @@ const NapisiObjavu: React.FC<PostProps> = ({
 
     const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
 
+    const [tags, setTags] = useState<Tag[]>([]);
+
     const history = useHistory();
     const { id } = useParams<{id: string}>();
     const { search } = useLocation();
 
     const isEditMode: boolean = new URLSearchParams(search).get("edit") === "true"? true: false;
+    const isCreationMode: boolean = id? false : true; 
 
     useEffect(() => {
         if(id)
@@ -101,6 +104,13 @@ const NapisiObjavu: React.FC<PostProps> = ({
                 })
                 .catch(error => console.log(error));
         }
+
+        const tag_url: string = "http://localhost:3002/tags";
+        fetch(tag_url)
+            .then((response) => response.json())
+            .then((jsonResponse) => {
+                console.log(jsonResponse);
+            })
     }, []);
     
     // useEffect(() => {
@@ -242,11 +252,13 @@ const NapisiObjavu: React.FC<PostProps> = ({
     //         console.log(greska);
     //     });       
     // }, []);
+    
+    console.log(isEditMode);
 
     return (
         <main className="objava container donja-margina-potomci">
             {
-                isEditMode
+                isCreationMode
                 ?
                 <form>
                     <div>
@@ -283,7 +295,7 @@ const NapisiObjavu: React.FC<PostProps> = ({
                             placeholder="Naslov"
                             name="naslov"
                             onChange={({target}) => setTitle(target.value)}
-                            value={title}
+                            value={isEditMode? title : ''}
                             required
                         />
                     </div>
@@ -301,10 +313,14 @@ const NapisiObjavu: React.FC<PostProps> = ({
                             placeholder="Kratak opis"
                             name="kratakOpis"
                             onChange={({target}) => setDescription(target.value)}
-                            value={description}
+                            value={isEditMode? description : ''}
                         /> 
                     </div>
                     <div>
+                        <label style={{fontSize: '16px'}}>
+                            Sadržaj:
+                        </label>
+                        <br/>
                         <textarea 
                             name="content" 
                             id="content"
@@ -312,8 +328,16 @@ const NapisiObjavu: React.FC<PostProps> = ({
                                 fontSize: '16px'
                             }}
                             onChange={({target}) => setContent(target.value)}
-                        >{content}</textarea>
+                            value={isEditMode? content: ''}
+                        ></textarea>
                     </div>
+
+                    <button 
+                        type="button"
+                        onClick={createPost}
+                    >
+                        Napravi objavu
+                    </button>
                 </form>
                 :
                 <article>
@@ -409,11 +433,11 @@ const NapisiObjavu: React.FC<PostProps> = ({
                     Nazad na objave
                 </button> */}
             {/* </div> */}
-            <button
+            {/* <button
                 onClick={() => createPost()}
             >
                 Napravi objavu
-            </button>
+            </button> */}
         </main>
     );
 

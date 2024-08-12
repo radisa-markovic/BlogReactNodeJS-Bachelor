@@ -94,7 +94,11 @@ export const getAll = async (
 ) => {
     try
     {
-        const tags = await Tag.findAll();
+        const tags = await Tag.findAll({
+            order: [
+                ['name', 'DESC']
+            ]
+        });
         if(!tags)
         {
             return response.status(404).json({
