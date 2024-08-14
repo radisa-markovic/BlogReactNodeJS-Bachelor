@@ -96,7 +96,7 @@ export const getAll = async (
     {
         const tags = await Tag.findAll({
             order: [
-                ['name', 'DESC']
+                ['name', 'ASC']
             ]
         });
         if(!tags)

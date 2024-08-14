@@ -8,12 +8,7 @@ import UnosSaPredlozima from "../UnosSaPredlozima";
 import PregledObjave from "./PostPreviewCard";
 import { Post } from "../../models/Post-refactor";
 import PostPreviewCard from "./PostPreviewCard";
-
-// interface Props
-// {
-//     adminJePrijavljen: boolean,
-//     prijavljenoKorisnickoIme: string
-// }
+import { BASE_URL } from "../../api/api";
 
 const PostList: React.FC<any> = (props) => {
     const [posts, setPosts] = useState<Post[]>([]);

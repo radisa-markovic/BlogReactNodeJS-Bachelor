@@ -17,6 +17,7 @@ import { BanovaniKorisnikPrikaz } from './components/korisnik/BanovaniKorisnikPr
 import KorisnickaStanica from './components/korisnik/KorisnickaStranica';
 import { PretplataNaBlog } from './components/PretplataNaBlog';
 import PostList from './components/blog/PostList';
+import { BASE_URL } from './api/api';
 
 function App() {
   const [korisnik, setKorisnik] = useState<Korisnik>({
@@ -25,6 +26,7 @@ function App() {
     adminStatus: false,
     brojNeprocitanihPoruka: 0
   });
+  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true);
   const [accessToken, setAccessToken] = useState<string>("");
   const [userData, setUserData] = useState<{id: number, username: string}>({
     id: -1,
@@ -32,17 +34,59 @@ function App() {
   });
 
   useEffect(() => {
-    const prijavljeniKorisnik = localStorage.getItem("korisnik");
-    if(prijavljeniKorisnik)
-    {
-      const prijavljeniKorisnikJSON = JSON.parse(prijavljeniKorisnik);
-      setKorisnik(prijavljeniKorisnikJSON);
-    }
+      const checkAuth = async () => {
+        try
+        {
+            const response = await fetch(BASE_URL + "/users/auth", {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              credentials: 'include',
+              mode: 'cors',
+              method: "POST"
+            });
+            if(response.ok)
+            {
+                const jsonResponse = await response.json();
+                setAccessToken(jsonResponse.accessToken);
+                setUserData(jsonResponse.userData);
+            }
+            setIsAuthenticating(false);
+        }
+        catch(error)
+        {
+          console.error(error);
+        }
+      }
+
+      checkAuth();
   }, []);
 
-  const logout = () => {
-    alert("User is logged out");
+  const logout = async () => {
+    const response = await fetch(BASE_URL + "/users/logout", {
+      headers: {
+        'Authorization': "Bearer " + accessToken
+      },
+      mode: 'cors',
+      credentials: 'include',
+      method: "POST",
+      body: JSON.stringify(userData)
+    });
+
+    if(response.ok)
+    {
+        alert("User is logged out");
+        setAccessToken('');
+        setUserData({
+          id: -1,
+          username: ''
+        });
+    }
+    
   }
+
+  if(isAuthenticating)
+    return <p>Loading...</p>;
 
   return (
     <BrowserRouter>

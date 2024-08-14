@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import * as userController from '../controllers/user';
 import * as userValidator from '../validators/user';
+import { checkJwt } from '../middleware/jwtAuth';
 
 const router = Router();
 
@@ -16,6 +17,7 @@ router.post(
     userValidator.validateUser(),
     userController.createUser
 );
+
 /**
  * need better reasoning: someone may update one element of
  * user data, and reuse the rest of unchanged fields
@@ -36,6 +38,12 @@ router.post(
     "/login", 
     userValidator.validateLoginData(),
     userController.login
+);
+router.post("/auth", userController.sendTokens);
+router.post(
+    '/logout',
+    checkJwt,
+    userController.logout
 );
 
 export default router;

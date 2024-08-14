@@ -3,6 +3,7 @@ import path from "path";
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from "cookie-parser";
 
 import Post from './models/post';
 import User from './models/user';
@@ -19,10 +20,26 @@ import { multerUploadMiddleware } from "./util/multer";
 
 dotenv.config();
 const app = express();
+app.use(cookieParser());
+app.set("trust proxy", 1);
 app.use(express.json());
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(cors({
+    origin: true,
+    credentials: true,
+    optionsSuccessStatus: 200
+}));
+/**==> check multer when changing this and vice versa */
+app.use(
+    '/images', 
+    express.static(
+        path.join(
+            __dirname, 
+            '..',
+            'images'
+        )
+    )
+);
 app.use(multerUploadMiddleware.single('coverImage'));
-app.use(cors());
 
 app.use("/posts", postRoutes);
 app.use("/users", userRoutes);
@@ -33,6 +50,24 @@ app.use("**", (request, response, next) => {
     })
 });
 
+//Read the docs: it says that this universal error handler should be set last
+app.use((
+    error: any, 
+    request: Request, 
+    response: Response, 
+    next: NextFunction
+) => {
+    const data = error.data;
+    const status = error.statusCode || 500;
+    const message = error.message || "Something went wrong";
+
+    response.status(status).json({
+        message: message,
+        data: data
+    });
+});
+
+/**==> should move up if the universal error handler doesn't work */
 User.hasMany(Post);
 Post.belongsTo(User, { 
     constraints: true, 
@@ -55,25 +90,17 @@ Reaction.belongsTo(Post, {
 });
 User.hasMany(Reaction);
 Reaction.belongsTo(User);
-// Post.hasMany(Tag);
-// Tag.hasMany(Post);
-
-//Read the docs: it says that this universal error handler should be set last
-app.use((
-    error: any, 
-    request: Request, 
-    response: Response, 
-    next: NextFunction
-) => {
-    const data = error.data;
-    const status = error.statusCode || 500;
-    const message = error.message || "Something went wrong";
-
-    response.status(status).json({
-        message: message,
-        data: data
-    });
+Post.belongsToMany(Tag, {
+    through: "Post_Tags",
+    constraints: true,
+    onDelete: "CASCADE"
 });
+Tag.belongsToMany(Post, {
+    through: "Post_Tags",
+    constraints: true,
+    onDelete: "CASCADE"
+});
+//2024-08-12 16:38:59
 
 const FORCE_SYNC: boolean = false;
 

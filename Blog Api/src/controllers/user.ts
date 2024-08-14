@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 import User from '../models/user';
 
-// const ACCESS_TOKEN_SECRET_SIGNATURE: string = "aa711eb31bfe9f77d61ec4146bdd521a3c00cff92169d9b7085965a49f03c97daa42399fc622c1488c292c9244e92ac702b9a4b34dd9e8994b9012e61aae3284";
+const REFRESH_TOKEN_KEY: string = "refreshToken";
 
 export const getUsers = async (
     request: Request, 
@@ -250,7 +250,32 @@ export const login = async (
             }, process.env.ACCESS_TOKEN_SECRET_SIGNATURE!, {
                 expiresIn: '1h'
             });
-    
+
+            /**
+             * also associate this token with the user in DB
+             */
+            const refreshToken = jwt.sign({
+                username: user.username,
+                id: user.id
+            }, process.env.REFRESH_TOKEN_SECRET_SIGNATURE!, {
+                expiresIn: '1d'
+            });
+
+            const ONE_DAY_IN_MILLISECONDS: number = 24 * 60 * 60 * 1000;
+            
+            response.cookie(
+                REFRESH_TOKEN_KEY,
+                // "refreshToken",
+                refreshToken,
+                {
+                    httpOnly: true,
+                    maxAge: ONE_DAY_IN_MILLISECONDS,
+                    // sameSite: "none",
+                    // secure: true,
+                    path: "/"
+                } 
+            );    
+
             response.status(201).json({
                 accessToken: accessToken,
                 username: user.username,
@@ -281,4 +306,82 @@ export const login = async (
             errors: errors.array()
         });
     }    
+}
+
+export const sendTokens = async (
+    request: Request,
+    response: Response,
+    next: NextFunction
+) => {
+    const refreshToken = request.cookies[REFRESH_TOKEN_KEY];
+    console.log(refreshToken);
+    if(!refreshToken)
+    {
+        return response.status(401).json({
+            message: 'No refresh token, user should be logged out'
+        });
+    }
+    console.log("Sad proveravam zeton");
+    //define a DB table for users and refresh token
+    let decodedToken;
+    try
+    {
+        decodedToken = jwt.verify(
+            refreshToken,
+            process.env.REFRESH_TOKEN_SECRET_SIGNATURE!
+        );
+    }
+    catch(error)
+    {
+        console.log(error);
+        throw error;
+    }
+
+    if(!decodedToken)
+    {
+        return response.status(403).json({
+            message: "Idk, something went wrong"
+        })
+    }
+
+    const newAccessToken = jwt.sign({
+        //@ts-ignore
+        username: decodedToken.username,
+        //@ts-ignore
+        id: decodedToken.id
+    }, process.env.ACCESS_TOKEN_SECRET_SIGNATURE!, {
+        expiresIn: '1h'
+    });
+
+    response.status(201).json({
+        accessToken: newAccessToken,
+        userData: {
+            //@ts-ignore
+            username: decodedToken.username,
+            //@ts-ignore
+            id: decodedToken.id
+        }
+    });
+}
+
+export const logout = async (
+    request: Request, 
+    response: Response, 
+    next: NextFunction
+) => {
+    const { username, id } = request.body;
+    console.log("Logging out in progress");
+    /**==> if access token is verified, no need to verify refresh token I think,
+     * just remove the cookie
+     */
+    response.clearCookie(
+        REFRESH_TOKEN_KEY, 
+        { 
+            httpOnly: true, 
+            sameSite: 'None', 
+            secure: true 
+        }
+    );
+
+    response.sendStatus(200);
 }

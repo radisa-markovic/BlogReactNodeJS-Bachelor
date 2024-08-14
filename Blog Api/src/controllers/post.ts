@@ -64,7 +64,8 @@ export const addPost = async (request: Request, response: Response, next: NextFu
             title, 
             description, 
             content,
-            userId
+            userId,
+            tags
          } = request.body as any;
         const coverImageUrl = request.file!.path; 
         console.group();
@@ -73,20 +74,27 @@ export const addPost = async (request: Request, response: Response, next: NextFu
             console.log(content);
             console.log(userId);
             console.log(coverImageUrl);
+            console.log(tags);
         console.groupEnd();
 
         try
         {
             const user = await User.findByPk(userId);
             //@ts-ignore
-            await user.createPost({
+            const createPostResult = await user.createPost({
                 title: title,
                 description: description,
                 content: content,
                 coverImageUrl: coverImageUrl,
                 userId: userId
             });   
-            
+            //I need new post Id to populate junction table
+            console.log(createPostResult);
+            const newPostId = createPostResult.dataValues.id;
+            const newlyInsertedPost = await Post.findByPk(newPostId);
+            //@ts-ignore
+            await newlyInsertedPost!.addTags(tags);
+
             response.status(201).json({
                 message: "Post successfully created",
             });

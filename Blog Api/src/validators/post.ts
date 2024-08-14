@@ -48,16 +48,8 @@ export const validatePost = (): ValidationChain[] => {
                 if(!user)
                     throw new Error('User with given id not found')
             }),
-        body('coverImage')
-            .exists()
-            .custom((value, { req }) => {
-                if(
-                    req.file.mimetype !== "image/jpeg" ||
-                    req.file.mimetype !== "image/jpg" ||
-                    req.file.mimetype !== "image/png"
-                )
-                    throw new Error('Proper image file type not provided. Provide jpeg, jpg or png');
-            })
-            .withMessage("Image error")
+        // body('coverImage')
+        //     .exists()
+        //     .withMessage("No image provided")
     ];
 }

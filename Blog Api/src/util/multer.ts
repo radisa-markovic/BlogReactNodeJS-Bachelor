@@ -5,7 +5,10 @@ import multer from "multer";
 const diskStorage = multer.diskStorage({
     destination: (request: any, file: any, callback: any) => {
         /**==> falilo je src/ iz nekog razloga */
-        callback(null, '/images');
+        /**==> read the docs: if function is provided
+         * here, directory must be manually built
+         */
+        callback(null, 'images/');
     },
     filename: (request: any, file: any, callback: any) => {
         callback(

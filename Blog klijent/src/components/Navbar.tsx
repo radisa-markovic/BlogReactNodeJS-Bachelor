@@ -2,14 +2,6 @@ import React from 'react';
 import { Link, NavLink, useHistory } from 'react-router-dom';
 import { Korisnik } from '../models/Korisnik';
 
-// interface NavbarProps
-// {
-//     korisnickoIme: string,
-//     adminJePrijavljen: boolean,
-//     brojNeprocitanihObjava: number,
-//     setKorisnik: React.Dispatch<React.SetStateAction<Korisnik>>;
-// }
-
 interface NavbarProps
 {
     userData: { id: number, username: string };
@@ -188,19 +180,6 @@ const Navbar: React.FC<NavbarProps> = ({
             </li>
         );
     }
-
-    // function odjaviSe()
-    // {
-    //     setKorisnickoIme({
-    //         id: -1, 
-    //         korisnickoIme: "",
-    //         adminStatus: false,
-    //         brojNeprocitanihPoruka: -1
-    //     });    
-    //     localStorage.removeItem("korisnik");
-    //     history.push("/");  
-    //     alert("Uspešna odjava");          
-    // }
 
     function toggleMenu(event: React.TouchEvent<HTMLLIElement>)
     {
