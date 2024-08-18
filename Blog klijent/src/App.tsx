@@ -59,7 +59,9 @@ function App() {
         }
       }
 
-      checkAuth();
+      checkAuth().finally(() => {
+        setIsAuthenticating(false);
+      });
   }, []);
 
   const logout = async () => {

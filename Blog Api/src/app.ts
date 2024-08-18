@@ -10,6 +10,7 @@ import User from './models/user';
 import Comment from "./models/comment";
 import Reaction from "./models/reaction";
 import Tag from "./models/tag";
+import RefreshToken from "./models/refreshToken";
 
 import postRoutes from './routes/post';
 import userRoutes from './routes/user';
@@ -99,6 +100,12 @@ Tag.belongsToMany(Post, {
     through: "Post_Tags",
     constraints: true,
     onDelete: "CASCADE"
+});
+
+User.hasMany(RefreshToken);
+RefreshToken.belongsTo(User, {
+    constraints: true,
+    onDelete: 'CASCADE'
 });
 //2024-08-12 16:38:59
 

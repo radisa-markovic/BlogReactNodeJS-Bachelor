@@ -53,6 +53,8 @@ const PrijaviSe: React.FC<AppProps> = ({ setAccessToken, setUserData }) => {
                 const loginError = new Error();
                 //@ts-ignore
                 loginError.errors = errors.errors;
+                //@ts-ignore
+                loginError.statusCode = response.status;
                 throw loginError;
             }
             alert("User logged in");
@@ -74,19 +76,27 @@ const PrijaviSe: React.FC<AppProps> = ({ setAccessToken, setUserData }) => {
                 type: string, 
                 value: string
             }
-            error.errors.forEach((error: ValidationError) => {
-                switch(error.path)
-                {
-                    case 'username':
-                        setUsernameError(error.msg);
-                        break;
-                    case 'password':
-                        setPasswordError(error.msg);
-                        break;
-                    default:
-                        break; 
-                }
-            });
+            if(error.statusCode === 404)
+            {
+                setUsernameError("No user found with the provided username");
+                return;
+            }
+            if(error.errors)
+            {
+                error.errors.forEach((error: ValidationError) => {
+                    switch(error.path)
+                    {
+                        case 'username':
+                            setUsernameError(error.msg);
+                            break;
+                        case 'password':
+                            setPasswordError(error.msg);
+                            break;
+                        default:
+                            break; 
+                    }
+                });
+            }
         }
     }
 
