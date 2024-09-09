@@ -82,7 +82,7 @@ export default function NoviUnosSlike(props: Props): JSX.Element
                 httpMetoda = "PATCH";
             }
             
-            debugger;
+            // debugger;
             console.log(httpMetoda);
 
             fetch(URL_ZA_KORISNICKE_SLIKE, {

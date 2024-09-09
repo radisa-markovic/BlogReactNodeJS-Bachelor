@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { isBuffer } from "util";
 import { TipoviPasusa } from "../../models/TipoviPasusa";
-import { PasusMeta } from "../blog/NapisiObjavu";
+// import { PasusMeta } from "../blog/NewPost";
 import UnosSlike from "./UnosSlike";
 
 interface Props
@@ -11,7 +11,7 @@ interface Props
     ukloniPasus: (redniBroj: number) => void,
     urediPasus?: (redniBrojPasusa: number, podnaslov: string, sadrzaj: string) => void,
     dodajSlike: Function,
-    postaviPasus: React.Dispatch<React.SetStateAction<PasusMeta[]>>
+    // postaviPasus: React.Dispatch<React.SetStateAction<PasusMeta[]>>
 }
 
 interface PasusSadrzaj
@@ -66,10 +66,10 @@ export default function Pasus(props: Props): JSX.Element
         const { value: odabraniTipPasusa } = event.target;
         console.log(odabraniTipPasusa);
         setVrstaPasusa(odabraniTipPasusa);
-        props.postaviPasus((stanje) => {
-            stanje[props.redniBroj].vrstaPasusa = odabraniTipPasusa
-            return stanje;
-        });
+        // props.postaviPasus((stanje) => {
+        //     stanje[props.redniBroj].vrstaPasusa = odabraniTipPasusa
+        //     return stanje;
+        // });
     }
 
     function prikaziPasus(): JSX.Element

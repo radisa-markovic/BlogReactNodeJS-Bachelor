@@ -113,7 +113,7 @@ export default function KorisnickaStanica(props: Props): JSX.Element
             </div> */}
             <Paginacija urlZaPaginaciju={OBJAVE_API} 
                         brojElemenataPoStranici={6} 
-                        korisnickoIme={korisnickoIme}
+                        korisnickoIme="Misko"
                         postaviElemente={setSopstveneObjave}
                         najnovijePrvo={true}
             />

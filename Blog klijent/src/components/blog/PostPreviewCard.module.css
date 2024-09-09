@@ -1,0 +1,41 @@
+.objava__pregled
+{
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-bottom: var(--razmak-medju-elementima);
+    margin-left: calc(var(--razmak-medju-elementima) / 2);
+    margin-right: calc(var(--razmak-medju-elementima) / 2);
+    margin-bottom: 2rem;
+}
+
+.objava__naslov
+{
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+.objava__procitaj_celu
+{
+    --text-font-size: 3rem;
+}
+
+.objava__procitaj_celu:hover
+{
+    color: #fca311;
+}
+
+.creationDate
+{
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.shortDescription
+{
+  color: black;
+}
+
+.postAuthor
+{
+    --text-font-size: 1.5rem;
+}

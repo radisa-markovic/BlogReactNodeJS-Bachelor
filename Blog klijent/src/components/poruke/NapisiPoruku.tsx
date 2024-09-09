@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
 import { PRETRAZI_KORISNICKO_IME, UPISI_PORUKU } from "../../ApiPutanje";
 import { Poruka } from "../../models/Poruka";
 import { upakujZahtev, uputiPoziv, vratiDatumPisanja } from "../../ServisneStvari";
@@ -22,7 +21,6 @@ export default function NapisiPoruku(props: Props): JSX.Element
         datumSlanja: "",
         procitana: false
     });
-    const history = useHistory();
 
     return(
         <main className="container">
@@ -95,7 +93,7 @@ export default function NapisiPoruku(props: Props): JSX.Element
         .then((odgovor) => {
             alert("Poruka uspesno poslata");
             console.log(odgovor);
-            history.push("/");
+            // history.push("/");
         })
         .catch((greska) => {
             alert("Doslo je do greske");

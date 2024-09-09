@@ -197,18 +197,6 @@ input[type="checkbox"][name="navigacijaHamburger"]
   font-size: 10rem;
   text-align: center;
 }
-/*=========== KONTROLE ===========*/
-.kontrola
-{
-  font-size: var(--text-font-size);
-  color: var(--primary-text-color);
-  border-radius: 4px;
-  border: 1px solid var(--primary-color);
-  width: 100%;
-  padding: 0.5rem;
-  margin: 1rem 0;
-  height: 4.2rem;
-}
 
 /*========= NAPRAVI NALOG ===========*/
 .napravi-nalog
@@ -340,48 +328,6 @@ input[type="checkbox"][name="navigacijaHamburger"]
   width: calc((100% / var(--broj-elemenata-u-vrsti)) - var(--razmak-medju-elementima));
 }
 
-.objava__pregled
-{
-  /* width: var(--velicina-objave); */
-  /* min-width: var(--minimalna-velicina-objave); */
-  border: 1px solid gray;
-  border-radius: 5px;
-  margin-bottom: var(--razmak-medju-elementima);
-}
-
-.objava__pregled
-{
-  margin-left: calc(var(--razmak-medju-elementima) / 2);
-  margin-right: calc(var(--razmak-medju-elementima) / 2);
-  margin-bottom: 2rem;
-}
-
-.objava__naslov
-{
-  font-weight: 700;
-  font-size: 2rem;
-}
-
-.objava__kratak-opis
-{
-  color: black;
-}
-
-.objava__autor
-{
-  --text-font-size: 1.5rem;
-}
-
-.objava__procitaj-celu
-{
-  --text-font-size: 3rem;
-}
-
-.objava__procitaj-celu:hover
-{
-  color: #fca311;
-}
-
 .objava__tagovi
 {
   display: flex;
@@ -478,12 +424,6 @@ input[type="checkbox"][name="navigacijaHamburger"]
 {
   font-size: 3rem;
   margin-right: 0.5rem;
-}
-
-.objava__datum-pisanja
-{
-  font-size: 1.5rem;
-  font-weight: 700;
 }
 
 .strelica,

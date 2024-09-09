@@ -1,10 +1,27 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
 import FormError from "../FormError";
+import { authProvider } from "../../api/auth";
+import { redirect } from "react-router-dom";
 
 const API_BASE: string = "http://localhost:3002";
 
-const NapraviNalog: React.FC<any> = () => {
+//@ts-ignore
+export const registerAction = async ({ request, params }) => {
+    const formData = await request.formData();
+    const email = formData;
+}
+
+export const registerLoader = async () => {
+    await authProvider.checkAuthStatus();
+    if(authProvider.accessToken)
+    {
+        return redirect("/");
+    }
+
+    return null;
+}
+
+const RegisterPage: React.FC<any> = () => {
     const [email, setEmail] = useState<string>('');
     const [emailError, setEmailError] = useState<string>('');
 
@@ -14,7 +31,7 @@ const NapraviNalog: React.FC<any> = () => {
     const [password, setPassword] = useState<string>('');
     const [passwordError, setPasswordError] = useState<string>('');
    
-    const history = useHistory();
+    // const history = useHistory();
 
     const createAccount = (event: React.MouseEvent) => {
         event.preventDefault();
@@ -42,7 +59,7 @@ const NapraviNalog: React.FC<any> = () => {
                 if(response.ok && response.statusText === "Created")
                 {
                     alert("User successfully created");
-                    history.push("/prijaviSe");
+                    // history.push("/prijaviSe");
                 }
                 else
                 {
@@ -152,4 +169,4 @@ const NapraviNalog: React.FC<any> = () => {
     );
 }
 
-export default NapraviNalog;
+export default RegisterPage;

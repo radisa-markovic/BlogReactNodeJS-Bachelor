@@ -3,9 +3,9 @@ import { Router } from 'express';
 import * as postController from '../controllers/post';
 import * as postValidator from '../validators/post';
 import { checkJwt } from '../middleware/jwtAuth';
+import { multerUploadMiddleware } from '../util/multer';
 
 const router = Router();
-
 router.get(
     "/", 
     postValidator.validateGetPosts(),
@@ -19,6 +19,7 @@ router.get(
 router.post(
     "/create", 
     checkJwt,
+    multerUploadMiddleware.single('coverImage'),
     postValidator.validatePost(),
     postController.addPost
 );

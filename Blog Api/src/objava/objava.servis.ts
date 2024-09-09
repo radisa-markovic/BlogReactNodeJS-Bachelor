@@ -71,7 +71,8 @@ export function vratiSveObjaveIzBaze(brojElemenataPoStranici: number, pomeraj: n
     return new Promise((resolve, reject) => {
         const konekcijaKaBazi = uspostaviKonekciju();
         const upit: string = `
-        SELECT objave.id, DATE_FORMAT(objave.datumPisanja, "%d-%m-%Y") AS datumPisanja, objave.naslov, objave.kratakOpis, objave.URLNaslovneSlike, korisnici.korisnickoIme, 
+        SELECT objave.id, DATE_FORMAT(objave.datumPisanja, "%d-%m-%Y") AS datumPisanja, objave.naslov, 
+        objave.kratakOpis, objave.URLNaslovneSlike, korisnici.korisnickoIme, 
         (SELECT COUNT(*) FROM objave ${ korisnickoIme !== "-"? "WHERE korisnickoIme = \"" + "\"" : " "}) AS brojObjava 
         FROM objave INNER JOIN korisnici ON objave.id_autora = korisnici.id
         ${korisnickoIme !== "-" ? " WHERE korisnici.korisnickoIme = \"" + korisnickoIme + "\"" : ""} 

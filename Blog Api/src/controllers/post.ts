@@ -55,8 +55,13 @@ export const getPosts = async (request: Request, response: Response, next: NextF
 
 }
 
-export const addPost = async (request: Request, response: Response, next: NextFunction) => {
+export const addPost = async (
+    request: Request, 
+    response: Response, 
+    next: NextFunction
+) => {
     const errors = validationResult(request);
+    console.log(request.body);
 
     if(errors.isEmpty())
     {
@@ -64,18 +69,16 @@ export const addPost = async (request: Request, response: Response, next: NextFu
             title, 
             description, 
             content,
-            userId,
-            tags
+            userId
          } = request.body as any;
-        const coverImageUrl = request.file!.path; 
-        console.group();
-            console.log(title);
-            console.log(description);
-            console.log(content);
-            console.log(userId);
-            console.log(coverImageUrl);
-            console.log(tags);
-        console.groupEnd();
+        
+        if(!request.file)
+        {
+            return response.status(500).json({
+                message: "File not uploaded"
+            });
+        }        
+        const coverImageUrl = request.file!.path;         
 
         try
         {
@@ -88,12 +91,12 @@ export const addPost = async (request: Request, response: Response, next: NextFu
                 coverImageUrl: coverImageUrl,
                 userId: userId
             });   
-            //I need new post Id to populate junction table
-            console.log(createPostResult);
-            const newPostId = createPostResult.dataValues.id;
-            const newlyInsertedPost = await Post.findByPk(newPostId);
-            //@ts-ignore
-            await newlyInsertedPost!.addTags(tags);
+            // //I need new post Id to populate junction table
+            // console.log(createPostResult);
+            // const newPostId = createPostResult.dataValues.id;
+            // const newlyInsertedPost = await Post.findByPk(newPostId);
+            // //@ts-ignore
+            // await newlyInsertedPost!.addTags(tags);
 
             response.status(201).json({
                 message: "Post successfully created",

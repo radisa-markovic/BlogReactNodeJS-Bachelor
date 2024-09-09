@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
 import { UPISI_PORUKU, VRATI_KORISNIKOVE_PORUKE } from "../../ApiPutanje";
 import { Poruka } from "../../models/Poruka";
 import { upakujZahtev, uputiPoziv } from "../../ServisneStvari";
@@ -14,7 +13,6 @@ function SpisakPoruka(props: Props): JSX.Element
 {
     const [poruke, setPoruke] = useState<Poruka[]>([]);
     const [tipPoruka, setTipPoruka] = useState<string>("poslatePoruke");
-    const history = useHistory();
     const { korisnickoIme } = props;
 
     useEffect(() => {
@@ -84,7 +82,7 @@ function SpisakPoruka(props: Props): JSX.Element
         .then((odgovor) => {
             alert("Poruka uspesno poslata");
             console.log(odgovor);
-            history.push("/");
+            // history.push("/");
         })
         .catch((greska) => {
             alert("Doslo je do greske");

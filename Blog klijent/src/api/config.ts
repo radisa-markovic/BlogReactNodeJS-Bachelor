@@ -1,0 +1,1 @@
+export const DEV_API_ROOT: string = "http://localhost:3002";

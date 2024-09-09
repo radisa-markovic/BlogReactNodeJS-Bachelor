@@ -1,6 +1,6 @@
 import path from "path";
 
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction, response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
@@ -17,13 +17,14 @@ import userRoutes from './routes/user';
 import tagRoutes from './routes/tag';
 
 import sequelize from "./util/database";
-import { multerUploadMiddleware } from "./util/multer";
 
 dotenv.config();
 const app = express();
 app.use(cookieParser());
 app.set("trust proxy", 1);
 app.use(express.json());
+//false - x-www-form-urlencoded can be parsed (Postman), true - form data can be parsed
+app.use(express.urlencoded({ extended: true }));
 app.use(cors({
     origin: true,
     credentials: true,
@@ -40,7 +41,6 @@ app.use(
         )
     )
 );
-app.use(multerUploadMiddleware.single('coverImage'));
 
 app.use("/posts", postRoutes);
 app.use("/users", userRoutes);
@@ -114,7 +114,7 @@ const FORCE_SYNC: boolean = false;
 sequelize
     .sync({ force: FORCE_SYNC })
     .then(() => {
-        app.listen(process.env.PORT || 3002, () => {
-            console.log("Server is up and running on port: " + process.env.PORT || 3002);
+        app.listen(3002, () => {
+            console.log("Server is up and running on port: " + 3002);
         });
     });

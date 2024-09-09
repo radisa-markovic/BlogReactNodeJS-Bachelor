@@ -232,7 +232,7 @@ export const login = async (
             if(!user)
             {
                 return response.status(404).json({
-                    message: "User with given email not found"
+                    usernameError: "User with given username not found"
                 });
             }
     
@@ -241,7 +241,7 @@ export const login = async (
             if(!passwordIsMatched)
             {
                 return response.status(404).json({
-                    message: "Password does not match"
+                    passwordError: "Password does not match"
                 });
             }
     
@@ -249,7 +249,7 @@ export const login = async (
                 username: user.username,
                 id: user.id
             }, process.env.ACCESS_TOKEN_SECRET_SIGNATURE!, {
-                expiresIn: '1h'
+                expiresIn: '10s'
             });
 
             const refreshToken = jwt.sign({

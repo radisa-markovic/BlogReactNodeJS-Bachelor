@@ -1,7 +1,8 @@
-import React, { FC } from "react";
 import { Link } from "react-router-dom";
 
+import styles from './PostPreviewCard.module.css';
 import { Post } from "../../models/Post-refactor";
+import { DEV_API_ROOT } from "../../api/config";
 
 const PostPreviewCard: React.FC<{post:Post}> = (props) => {
     const {
@@ -15,10 +16,10 @@ const PostPreviewCard: React.FC<{post:Post}> = (props) => {
     } = props.post;
 
     return(
-        <article className="objava__pregled donja-margina-potomci">
+        <article className={styles.objava__pregled + " donja-margina-potomci"}>
             <div className="drzac-slike">
                 <img 
-                    src={"http://localhost:3002/" + coverImageUrl} 
+                    src={DEV_API_ROOT + "/" + coverImageUrl} 
                     alt="" 
                     width={245}
                     height={245}
@@ -26,27 +27,27 @@ const PostPreviewCard: React.FC<{post:Post}> = (props) => {
                 />
             </div>
             <header className="objava__header container">
-                <h2 className="objava__naslov">
+                <h2 className={styles.objava__naslov}>
                     <Link 
-                        to={`/objava/${id}`}
-                        className="objava__procitaj-celu"
+                        to={`/post/${id}`}
+                        className={styles.objava__procitaj_celu}
                     >
                         { title }
                     </Link>
                 </h2>
-                <time className="objava__datum-pisanja">
+                <time className={styles.creationDate}>
                     { createdAt }
                 </time>
-                <p className="objava__kratak-opis">
+                <p className={styles.shortDescription}>
                     { description }
                 </p>
-                <h3 className="objava__autor">
+                <h3 className={styles.postAuthor}>
                     <i>Napisao:</i> { user.username }
                 </h3>
             </header>
             <Link 
                 to={`/post/${id}`} 
-                className="objava__procitaj-celu"
+                className={styles.objava__procitaj_celu}
             >
                 Pročitaj celu objavu
             </Link>

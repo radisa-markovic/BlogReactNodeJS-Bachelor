@@ -42,7 +42,6 @@ router.post(
 router.post("/auth", userController.sendTokens);
 router.post(
     '/logout',
-    checkJwt,
     userController.logout
 );
 
