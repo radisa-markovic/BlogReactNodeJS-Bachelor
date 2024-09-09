@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+import { ActionFunctionArgs, json, Link, useFetcher } from "react-router-dom";
 
 import styles from './PostPreviewCard.module.css';
-import { Post } from "../../models/Post-refactor";
+import { Post } from "../../models/Post";
 import { DEV_API_ROOT } from "../../api/config";
+import { authProvider } from "../../api/auth";
 
 const PostPreviewCard: React.FC<{post:Post}> = (props) => {
     const {
@@ -11,9 +12,9 @@ const PostPreviewCard: React.FC<{post:Post}> = (props) => {
         description,
         coverImageUrl,
         createdAt,
-        updatedAt,
         user
     } = props.post;
+    const fetcher = useFetcher();
 
     return(
         <article className={styles.objava__pregled + " donja-margina-potomci"}>
@@ -45,14 +46,55 @@ const PostPreviewCard: React.FC<{post:Post}> = (props) => {
                     <i>Napisao:</i> { user.username }
                 </h3>
             </header>
-            <Link 
-                to={`/post/${id}`} 
-                className={styles.objava__procitaj_celu}
-            >
-                Pročitaj celu objavu
-            </Link>
+            <div className="container">
+                <Link 
+                    to={`/post/${id}`} 
+                    className={styles.objava__procitaj_celu}
+                >
+                    Pročitaj celu objavu
+                </Link>
+                <br/>
+                <Link 
+                    to={`/post/${id}/edit`}
+                    className={styles.objava__procitaj_celu}
+                >
+                    Izmeni
+                </Link>
+                <br/>
+                <fetcher.Form
+                    method="DELETE"
+                    action={`/post/${id}/delete`}
+                >
+                    <button 
+                        type="submit"
+                        style={{fontSize: '20px', backgroundColor: 'red', color: 'white'}}
+                    >
+                        Obrisi
+                    </button>
+                </fetcher.Form>
+            </div>
         </article>       
     );
+}
+
+export async function action({ request, params}: ActionFunctionArgs)
+{
+    const postId = parseInt(params.id!);
+    const apiRequest: RequestInit = {
+        headers: {
+            "Authorization": "Bearer " + authProvider.accessToken,
+        },
+        method: "DELETE",
+    };
+
+    const response = await fetch(`${DEV_API_ROOT}/posts/${postId}`, apiRequest);
+    if(!response.ok)
+    {
+        throw json(response, {status: response.status});
+    }
+
+    alert('Successfully deleted post with id: ' + postId);
+    return json(response);
 }
 
 export default PostPreviewCard;

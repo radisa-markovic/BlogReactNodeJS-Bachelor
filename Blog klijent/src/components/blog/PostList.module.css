@@ -1,0 +1,15 @@
+.grid
+{
+  --broj-elemenata-u-vrsti: 3;
+  /* --velicina-objave: 32%; */
+  --minimalna-velicina-objave: 20rem;
+  --razmak-medju-elementima: 1rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.grid > *
+{
+  width: calc((100% / var(--broj-elemenata-u-vrsti)) - var(--razmak-medju-elementima));
+}

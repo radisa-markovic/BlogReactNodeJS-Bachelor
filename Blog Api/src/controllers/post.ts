@@ -146,8 +146,22 @@ export const getPost = async (request: Request, response: Response, next: NextFu
         //         }
         //     ] 
         // });
-        const result = await Post.findByPk(postId);
-        console.log(result);
+        const result = await Post.findByPk(postId, {
+            attributes: [
+                "id",
+                "title",
+                "coverImageUrl",
+                "description",
+                "content",
+                "createdAt",
+                "updatedAt"
+            ],
+            include: {
+                model: User,
+                attributes: ["id", "username"],
+                as: 'user'
+            }
+        });
 
         if(!result)
         {
@@ -159,8 +173,6 @@ export const getPost = async (request: Request, response: Response, next: NextFu
         response.status(201).json({
             message: "Post found",
             post: result,
-            //@ts-ignore
-            OP: await result.getUser()
         });
     }
     catch(error: any)
@@ -186,21 +198,32 @@ export const updatePost = async (request: Request, response: Response, next: Nex
         const errors = validationResult(request);
         if(errors.isEmpty())
         {
-            /**
-             * the entire post data is always being sent
-             * so that I don't have to filter through x amount
-             * of properties
-             */
-            const result = await Post.update({
-                title: request.body.title,
-                content: request.body.content,
-                description: request.body.description,
-                coverImageUrl: request.body.coverImageUrl
-            }, {
-                where: {
-                    id: postId
+            // shouldn't update if nothing was present
+            // if(!request.file)
+            // {
+            //     return response.status(500).json({
+            //         message: "File not uploaded"
+            //     });
+            // }
+            let fieldsWithNewValues: Record<string, any> = {};
+            for(const key in request.body)
+            {
+                if(key !== 'userId')
+                {
+                    fieldsWithNewValues[key] = request.body[key];
                 }
-            });
+            }
+            if(request.file)
+                fieldsWithNewValues['coverImageUrl'] = request.file.path;
+
+            const result = await Post.update(
+                fieldsWithNewValues, 
+                {
+                    where: {
+                        id: postId
+                    }
+                }
+            );
 
             if(!result)
             {

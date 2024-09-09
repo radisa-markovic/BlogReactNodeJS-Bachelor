@@ -15,10 +15,12 @@ import { RouteNames } from './routes';
 import { authProvider } from './api/auth';
 
 import Layout from './Layout';
-import NewPostPage, { action as newPostAction } from './pages/NewPost';
+import NewPostPage from './pages/NewPost';
 import EditPostPage, { loader as singlePostLoader } from './pages/EditPost';
 import SinglePostPage from './pages/SinglePostPage';
 import PostsPage, { loader as postsLoader } from './pages/Posts';
+import { action as deleteOnePost } from './components/blog/PostPreviewCard';
+import { action as postOperations } from './components/blog/PostForm';
 
 const routes: RouteObject[] = [
   {
@@ -57,7 +59,7 @@ const routes: RouteObject[] = [
           {
             path: "new",
             element: <NewPostPage/>,
-            action: newPostAction
+            action: postOperations
           },
           {
             path: ":postId",
@@ -70,7 +72,8 @@ const routes: RouteObject[] = [
               },
               {
                 path: "edit",
-                element: <EditPostPage/>
+                element: <EditPostPage/>,
+                action: postOperations
               },
             ]
           }
@@ -89,6 +92,10 @@ const routes: RouteObject[] = [
       await authProvider.logout();
       return redirect("/");
     }
+  },
+  {
+    path: '/post/:id/delete',
+    action: deleteOnePost
   }
 ];
 

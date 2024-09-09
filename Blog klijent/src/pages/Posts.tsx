@@ -1,7 +1,7 @@
 import { useLoaderData } from "react-router-dom";
 import { postService } from "../api/post.service";
 import PostList from "../components/blog/PostList";
-import { Post } from "../models/Post-refactor";
+import { Post } from "../models/Post";
 
 export default function PostsPage()
 {

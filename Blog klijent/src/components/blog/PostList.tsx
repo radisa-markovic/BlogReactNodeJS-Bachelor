@@ -1,7 +1,7 @@
-import { useLoaderData } from "react-router-dom";
-
-import { Post } from "../../models/Post-refactor";
+import { Post } from "../../models/Post";
 import PostPreviewCard from "./PostPreviewCard";
+import styles from './PostList.module.css';
+
 interface Props
 {
     posts: Post[]
@@ -17,7 +17,7 @@ const PostList: React.FC<Props> = ({ posts }) => {
                         Filter (soon):
                     </p>
                 </div>
-                <div className="objava__spisak">
+                <div className={styles.grid}>
                     {
                         posts.map((post) => 
                             <PostPreviewCard 

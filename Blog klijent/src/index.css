@@ -103,6 +103,11 @@ button
   font-size: var(--text-font-size);
 }
 
+.text--center
+{
+  text-align: center;
+}
+
 .title
 {
   font-size: calc(2 * var(--text-font-size));
@@ -312,22 +317,6 @@ input[type="checkbox"][name="navigacijaHamburger"]
   max-width: 65rem;
 }
 
-.objava__spisak
-{
-  --broj-elemenata-u-vrsti: 3;
-  /* --velicina-objave: 32%; */
-  --minimalna-velicina-objave: 20rem;
-  --razmak-medju-elementima: 1rem;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.objava__spisak > *
-{
-  width: calc((100% / var(--broj-elemenata-u-vrsti)) - var(--razmak-medju-elementima));
-}
-
 .objava__tagovi
 {
   display: flex;
@@ -344,12 +333,6 @@ input[type="checkbox"][name="navigacijaHamburger"]
   background-color: #14213d;
 }
 
-.objava__holder
-{
-  margin: 4rem auto;
-  display: flex;
-  gap: 5rem;
-}
 
 .objava__tekst,
 .objava__unos-komentara
@@ -603,11 +586,6 @@ input[type="radio"][name="paginacijaDugme"]:checked + .paginacija__dugme
 }
 
 /*=========== PREPORUKE ==============*/
-.objava__holder .preporuke
-{
-  max-width: 44rem;
-}
-
 .preporuke__holder
 {
   /* max-width: 32rem; */
@@ -747,10 +725,6 @@ input[name="aktivnost-dugme"]:checked + section
     padding: 0.5rem 1rem;
   }
 
-  .objava__holder
-  {
-    flex-direction: column;
-  }
 
   /*========== CHECBOX HAMBURGRER LABEL ==========*/
   input[type="checkbox"][name="navigacijaHamburger"] ~ .navigation__items

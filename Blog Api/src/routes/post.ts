@@ -25,6 +25,7 @@ router.post(
 );
 router.patch(
     "/:postId", 
+    multerUploadMiddleware.single('coverImage'),
     postValidator.validatePost(),
     postController.updatePost
 );

@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 
 const ErrorPage: React.FC<any> = () => {
     let error = useRouteError() as any;
-    console.log(error.data.message);
+    console.log(error);
 
     return (
         <>
@@ -12,7 +12,7 @@ const ErrorPage: React.FC<any> = () => {
                 Something went wrong
             </h1>
             <p style={{fontSize: '70px', textAlign: 'center'}}>
-                { error.data.message }
+                { error.data.message || "Idk, something's wrong" }
             </p>
         </>
     )

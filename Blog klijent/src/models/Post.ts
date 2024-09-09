@@ -1,10 +1,10 @@
 export interface Post
 {
     id: number;
+    coverImageUrl: string;
     title: string;
     description: string;
     content: string;
-    coverImageUrl: string;
     createdAt: string;
     updatedAt: string;
     user: {

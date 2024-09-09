@@ -1,8 +1,13 @@
 import { useRouteLoaderData } from 'react-router-dom';
 
+import { Post } from '../../models/Post';
+
 export function SinglePost()
 {
-    const data = useRouteLoaderData('single-post') as { op: any, message: string, post: any };
+    const data = useRouteLoaderData('single-post') as { 
+        message: string, 
+        post: Post
+    };
 
     return (
         <main className="objava__holder container">
