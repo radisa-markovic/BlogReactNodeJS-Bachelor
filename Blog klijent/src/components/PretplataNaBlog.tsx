@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+// import { useHistory } from "react-router";
 import { POTVRDI_MEJL_ZA_PRETPLATU } from "../ApiPutanje";
 import { upakujZahtev, uputiPoziv } from "../ServisneStvari";
 
@@ -7,7 +7,7 @@ export function PretplataNaBlog(): JSX.Element
 {
     const [email, setEmail] = useState<string>("");
     const [obavestenje, setObavestenje] = useState<string>("");
-    const history = useHistory();
+    // const history = useHistory();
 
     return (
         <main className="container" style={{maxWidth: '50rem'}}>
@@ -45,7 +45,7 @@ export function PretplataNaBlog(): JSX.Element
     {
         uputiPoziv(POTVRDI_MEJL_ZA_PRETPLATU, upakujZahtev("POST", {mejl : email}))
         .then((odgovor) => {
-            history.push("/");
+            // history.push("/");
             alert("Uspešno registrovanje pretplate");
         }).catch((greska) => {
             console.error(greska);

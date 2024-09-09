@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { PRETRAZI_KORISNICKO_IME, PRETRAZI_NASLOV_OBJAVE } from "../ApiPutanje";
 import { Poruka } from "../models/Poruka";
 import { upakujZahtev, uputiPoziv } from "../ServisneStvari";
@@ -17,7 +17,7 @@ export default function UnosSaPredlozima(props: Props): JSX.Element
 {
     const [predlozi, setPredlozi] = useState<any[]>([]);
     const listaPredloga = useRef<HTMLUListElement>(null);
-    const history = useHistory();
+    // const history = useHistory();
 
     return(
         <div className="kontejner-unosa-sa-predlozima">
@@ -98,7 +98,7 @@ export default function UnosSaPredlozima(props: Props): JSX.Element
             {
                 const idObjave = theTarget.dataset.id;
                 console.log(idObjave);
-                history.push(`/objava/${idObjave}`);
+                // history.push(`/objava/${idObjave}`);
             }
         }
     }
