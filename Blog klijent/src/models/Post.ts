@@ -7,11 +7,13 @@ export interface Post
     title: string;
     description: string;
     content: string;
+    likeCount: number;
+    dislikeCount: number;
     createdAt: string;
     updatedAt: string;
     user: {
         id: number;
         username: string
     },
-    comments: Comment[]
+    comments: Comment[],
 }

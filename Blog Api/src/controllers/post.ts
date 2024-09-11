@@ -5,6 +5,7 @@ import Post from '../models/post';
 import Comment from "../models/comment";
 import User from "../models/user";
 import Reaction from "../models/reaction";
+import sequelize from "../util/database";
 
 export const getPosts = async (request: Request, response: Response, next: NextFunction) => {
     const errors = validationResult(request);
@@ -154,7 +155,23 @@ export const getPost = async (request: Request, response: Response, next: NextFu
                 "description",
                 "content",
                 "createdAt",
-                "updatedAt"
+                "updatedAt",
+                [
+                    sequelize.literal(`(
+                        SELECT COUNT(*)
+                        FROM reactions
+                        WHERE reactions.postId=${postId} AND reactions.code=0
+                    )`),
+                    'likeCount'
+                ],
+                [
+                    sequelize.literal(`(
+                        SELECT COUNT(*)
+                        FROM reactions
+                        WHERE reactions.postId=${postId} AND reactions.code=1
+                    )`),
+                    'dislikeCount'
+                ]                
             ],
             include: [
                 {
@@ -355,7 +372,8 @@ export const addReaction = async (
     response: Response, 
     next: NextFunction
 ) => {
-    const { code, postId, userId } = request.body;
+    const { postId } = request.params;
+    const { code, userId } = request.body;
     try
     {
         const post = await Post.findByPk(postId);

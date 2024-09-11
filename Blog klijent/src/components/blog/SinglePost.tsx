@@ -32,6 +32,34 @@ export function SinglePost()
                 </div>
             </article>
 
+            <section>
+                <h2>Reakcije</h2>
+                <ul>
+                    <li>
+                        <fetcher.Form
+                            method='POST'
+                            action={`/post/${data.post.id}/like`}
+                        >
+                            <button type="submit" style={{backgroundColor: 'green', color: 'white'}}>
+                                Lajkuj
+                            </button>
+                        </fetcher.Form>
+                        <span>Lajkovi: { data.post.likeCount }</span>
+                    </li>
+                    <li>
+                        <fetcher.Form
+                            method='POST'
+                            action={`/post/${data.post.id}/dislike`}
+                        >
+                            <button type="submit" style={{backgroundColor: 'red', color: 'white'}}>
+                                Dislajkuj
+                            </button>
+                        </fetcher.Form>
+                        <span>Dislajkovi: { data.post.dislikeCount }</span>
+                    </li>
+                </ul>
+            </section>
+
             <section className="objava__odeljak-komentara">
                 <h2>Komentari</h2>
                 <fetcher.Form
@@ -128,5 +156,73 @@ export async function action({ request, params }: ActionFunctionArgs)
     catch(error)
     {
         throw error;
+    }
+}
+
+export async function likePost({ request, params}: ActionFunctionArgs)
+{
+    const postId = params.id;
+    if(!postId) return;
+
+    const apiRequest: RequestInit = {
+        headers: {
+            'Authorization': 'Bearer ' + authProvider.accessToken,
+            'Content-type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+            code: 0,
+            postId: postId,
+            userId: authProvider.userData?.id
+        })
+    };
+
+    try
+    {
+        const response = await fetch(`${DEV_API_ROOT}/posts/addReaction/${postId}`, apiRequest);
+        if(!response.ok)
+            throw json(response, { status: response.status });
+        
+        //ne znam da li ovde da neutralizujem, ili u nekom exceptionu
+        return null;
+    }
+    catch(error: any)
+    {
+        console.error(error);
+        throw json(error, { status: error.status })
+    }
+}
+
+export async function dislikePost({ request, params}: ActionFunctionArgs)
+{
+    const postId = params.id;
+    if(!postId) return;
+
+    const apiRequest: RequestInit = {
+        headers: {
+            'Authorization': 'Bearer ' + authProvider.accessToken,
+            'Content-type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+            code: 1,
+            postId: postId,
+            userId: authProvider.userData?.id
+        })
+    };
+
+    try
+    {
+        const response = await fetch(`${DEV_API_ROOT}/posts/addReaction/${postId}`, apiRequest);
+        if(!response.ok)
+            throw json(response, { status: response.status });
+        
+        //ne znam da li ovde da neutralizujem, ili u nekom exceptionu
+        return null;
+    }
+    catch(error: any)
+    {
+        console.error(error);
+        throw json(error, { status: error.status })
     }
 }

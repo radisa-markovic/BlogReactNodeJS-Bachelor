@@ -39,7 +39,7 @@ router.post(
     postController.addComment
 );
 router.post(
-    "/addReaction",
+    "/addReaction/:postId",
     postController.addReaction
 );
 

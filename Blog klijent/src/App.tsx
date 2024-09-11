@@ -20,7 +20,7 @@ import SinglePostPage from './pages/SinglePostPage';
 import PostsPage, { loader as postsLoader } from './pages/Posts';
 import { action as deleteOnePost } from './components/blog/PostPreviewCard';
 import { action as postOperations } from './components/blog/PostForm';
-import { action as addComment } from './components/blog/SinglePost';
+import { action as addComment, dislikePost, likePost } from './components/blog/SinglePost';
 
 const routes: RouteObject[] = [
   {
@@ -96,6 +96,14 @@ const routes: RouteObject[] = [
   {
     path: '/post/:id/delete',
     action: deleteOnePost
+  },
+  {
+    path: '/post/:id/like',
+    action: likePost
+  },
+  {
+    path: '/post/:id/dislike',
+    action: dislikePost
   },
   {
     path: "/comment/:postId/add",
