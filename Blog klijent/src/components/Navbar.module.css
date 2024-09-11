@@ -1,0 +1,37 @@
+/*============ NAVIGATION ==========*/
+.navigation-bar
+{
+  /* box-shadow: 0px 2px 10px black; */
+  --primary-text-color: white;
+  padding: 2rem 0;
+  background-color: var(--primary-color);
+}
+
+.items
+{
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.link
+{
+  display: block;
+  --text-font-size: 1.5rem;
+  font-weight: normal;
+  padding: 1rem;
+  text-align: center;
+}
+
+.link:hover
+{
+  background-color: teal;
+  color: white;
+}
+
+.active-route
+{
+  background-color: teal;
+  color: white !important;
+}

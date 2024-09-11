@@ -156,11 +156,23 @@ export const getPost = async (request: Request, response: Response, next: NextFu
                 "createdAt",
                 "updatedAt"
             ],
-            include: {
-                model: User,
-                attributes: ["id", "username"],
-                as: 'user'
-            }
+            include: [
+                {
+                    model: User,
+                    attributes: ["id", "username"],
+                    as: 'user'
+                },
+                {
+                    model: Comment,
+                    attributes: ['id', 'content', 'createdAt', 'updatedAt'],
+                    include: [
+                        {
+                            model: User,
+                            attributes: ["username"]
+                        }
+                    ]
+                }
+            ]
         });
 
         if(!result)

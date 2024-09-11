@@ -1,0 +1,21 @@
+.comments
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+label.add-comment-label
+{
+    font-size: 16px;
+    font-weight: 700;
+    display: block;
+}
+
+textarea.add-comment
+{
+    resize: none;
+    width: 100%;
+    font-size: 20px;
+    padding: 5px;
+}

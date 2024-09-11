@@ -1,4 +1,3 @@
-import { Komentar } from "./Komentar";
 import { Tag } from "./Tag";
 
 export interface Objava
@@ -11,7 +10,6 @@ export interface Objava
     id_autora: number,
     korisnickoIme: string,
     tagovi: Tag[],
-    komentari: Komentar[],
     brojKomentara: number,
     brojLajkova: number,
     brojDislajkova: number,

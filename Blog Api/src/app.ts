@@ -14,6 +14,7 @@ import RefreshToken from "./models/refreshToken";
 
 import postRoutes from './routes/post';
 import userRoutes from './routes/user';
+import commentRoutes from './routes/comment';
 import tagRoutes from './routes/tag';
 
 import sequelize from "./util/database";
@@ -44,6 +45,7 @@ app.use(
 
 app.use("/posts", postRoutes);
 app.use("/users", userRoutes);
+app.use("/comments", commentRoutes);
 app.use("/tags", tagRoutes);
 app.use("**", (request, response, next) => {
     response.status(404).json({

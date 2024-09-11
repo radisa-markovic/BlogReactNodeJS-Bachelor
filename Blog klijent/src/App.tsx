@@ -11,7 +11,6 @@ import {
 import LoginPage, { loginAction, loginLoader } from './components/korisnik/LoginPage';
 import RegisterPage, { registerAction, registerLoader } from './components/korisnik/RegisterPage';
 import ErrorPage from './ErrorPage';
-import { RouteNames } from './routes';
 import { authProvider } from './api/auth';
 
 import Layout from './Layout';
@@ -21,6 +20,7 @@ import SinglePostPage from './pages/SinglePostPage';
 import PostsPage, { loader as postsLoader } from './pages/Posts';
 import { action as deleteOnePost } from './components/blog/PostPreviewCard';
 import { action as postOperations } from './components/blog/PostForm';
+import { action as addComment } from './components/blog/SinglePost';
 
 const routes: RouteObject[] = [
   {
@@ -96,6 +96,10 @@ const routes: RouteObject[] = [
   {
     path: '/post/:id/delete',
     action: deleteOnePost
+  },
+  {
+    path: "/comment/:postId/add",
+    action: addComment
   }
 ];
 

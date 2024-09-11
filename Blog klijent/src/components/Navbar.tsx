@@ -3,18 +3,18 @@ import {
     useFetcher, 
 } from 'react-router-dom';
 
+import styles from './Navbar.module.css';
 import { RouteNames } from '../routes';
 import { authProvider } from '../api/auth';
 
 export default function Navbar()
 {    
     const fetcher = useFetcher();
-
     let isLoggingOut = fetcher.formData != null;
 
     return (
-        <nav className='navigation'>
-            <ul className="navigation__items container">
+        <nav className={styles['navigation-bar']}>
+            <ul className={styles.items + " container"}>
                 <li className="navigation__item">
                     Blog
                 </li>
@@ -23,7 +23,7 @@ export default function Navbar()
                         to={RouteNames.allPosts}
                         className={({ isActive, isPending }) =>
                             isActive
-                              ? "active-route"
+                              ? styles["active-route"]
                               : isPending
                               ? "pending"
                               : ""
@@ -40,7 +40,7 @@ export default function Navbar()
                                 to={RouteNames.loginPage}
                                 className={({ isActive, isPending }) =>
                                     isActive
-                                    ? "active-route"
+                                    ? styles["active-route"]
                                     : isPending
                                     ? "pending"
                                     : ""
@@ -54,7 +54,7 @@ export default function Navbar()
                                 to={RouteNames.registerPage}
                                 className={({ isActive, isPending }) =>
                                     isActive
-                                    ? "active-route"
+                                    ? styles["active-route"]
                                     : isPending
                                     ? "pending"
                                     : ""
@@ -71,7 +71,7 @@ export default function Navbar()
                                 to="post/new"
                                 className={({ isActive, isPending }) =>
                                     isActive
-                                    ? "active-route"
+                                    ? styles["active-route"]
                                     : isPending
                                     ? "pending"
                                     : ""
@@ -91,8 +91,7 @@ export default function Navbar()
                             </fetcher.Form>
                         </li>
                     </>
-                }
-                
+                }   
             </ul>
         </nav>
     );

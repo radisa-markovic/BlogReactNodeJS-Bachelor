@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { VRATI_DISLAJKOVANE_OBJAVE, VRATI_LAJKOVANE_OBJAVE, VRATI_MOJE_OBJAVE, VRATI_SVE_KORISNIKOVE_KOMENTARE } from "../../ApiPutanje";
-import { Komentar } from "../../models/Komentar";
 import { Korisnik } from "../../models/Korisnik";
 import { Objava } from "../../models/Objava";
 import { uputiPoziv } from "../../ServisneStvari";
