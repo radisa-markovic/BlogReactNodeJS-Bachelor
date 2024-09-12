@@ -12,7 +12,10 @@ const PostPreviewCard: React.FC<{post:Post}> = (props) => {
         description,
         coverImageUrl,
         createdAt,
-        user
+        user,
+        commentCount,
+        likeCount,
+        dislikeCount
     } = props.post;
     const fetcher = useFetcher();
 
@@ -73,6 +76,17 @@ const PostPreviewCard: React.FC<{post:Post}> = (props) => {
                     </button>
                 </fetcher.Form>
             </div>
+            <ul className="container">
+                <li>
+                    Lajkovi: { likeCount }
+                </li>
+                <li>
+                    Dislajkovi: { dislikeCount }
+                </li>
+                <li>
+                    Komentari: { commentCount }
+                </li>
+            </ul>
         </article>       
     );
 }

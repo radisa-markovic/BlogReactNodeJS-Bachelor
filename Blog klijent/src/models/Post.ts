@@ -9,6 +9,7 @@ export interface Post
     content: string;
     likeCount: number;
     dislikeCount: number;
+    commentCount: number;
     createdAt: string;
     updatedAt: string;
     user: {

@@ -21,9 +21,49 @@ export const getPosts = async (request: Request, response: Response, next: NextF
             console.log(dateSortOrder);
 
             const result = await Post.findAll({
-                attributes: { 
-                    exclude: ['userId'] 
-                },
+                attributes: [
+                    "id",
+                    "title",
+                    "coverImageUrl",
+                    "description",
+                    "content",
+                    "createdAt",
+                    "updatedAt",
+                    [
+                        sequelize.literal(`(
+                            SELECT IFNULL(
+                                (SELECT COUNT(*)
+                                FROM reactions
+                                WHERE reactions.code=0
+                                GROUP BY reactions.postId)
+                            , 0)
+                        )`),
+                        'likeCount'
+                    ],
+                    [
+                        sequelize.literal(`(
+                            SELECT IFNULL(
+                                (SELECT COUNT(*)
+                                FROM reactions
+                                WHERE reactions.code=1
+                                GROUP BY reactions.postId)
+                            , 0)
+                        )`),
+                        'dislikeCount'
+                    ],
+                    [
+                        /**post is magically present here as a variable it seems */
+                        sequelize.literal(`(
+                            SELECT IFNULL(
+                                (SELECT COUNT(*)
+                                FROM comments
+                                WHERE comments.postId = post.id
+                                GROUP BY comments.postId)
+                            , 0)
+                        )`),
+                        'commentCount'
+                    ]               
+                ],
                 include:
                 {
                     model: User,
@@ -138,15 +178,6 @@ export const getPost = async (request: Request, response: Response, next: NextFu
     const { postId } = request.params;
     try
     {
-        // const result = await Post.findByPk(postId, { 
-        //     include: [
-        //         {
-        //             model: Comment,
-        //             required: true,
-        //             include: [User]
-        //         }
-        //     ] 
-        // });
         const result = await Post.findByPk(postId, {
             attributes: [
                 "id",
