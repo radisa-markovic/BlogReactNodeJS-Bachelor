@@ -1,10 +1,9 @@
-import React, { useState } from "react";
 import { ActionFunctionArgs, Form, redirect, useActionData } from "react-router-dom";
 
 import styles from './Forms.module.css';
 
-import FormError from "../FormError";
-import { authProvider } from "../../api/auth";
+import FormError from "../components/FormError";
+import { authProvider } from "../api/auth";
 
 const API_BASE: string = "http://localhost:3002";
 

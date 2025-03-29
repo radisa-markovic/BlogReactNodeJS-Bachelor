@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json, Link, useFetcher } from "react-router-dom";
+import { ActionFunctionArgs, json, Link, NavLink, useFetcher } from "react-router-dom";
 
 import styles from './PostPreviewCard.module.css';
 import { Post } from "../../models/Post";
@@ -21,72 +21,81 @@ const PostPreviewCard: React.FC<{post:Post}> = (props) => {
 
     return(
         <article className={styles.objava__pregled + " donja-margina-potomci"}>
-            <div className="drzac-slike">
-                <img 
-                    src={DEV_API_ROOT + "/" + coverImageUrl} 
-                    alt="" 
-                    width={245}
-                    height={245}
-                    loading="lazy"
-                />
-            </div>
-            <header className="objava__header container">
-                <h2 className={styles.objava__naslov}>
-                    <Link 
-                        to={`/post/${id}`}
-                        className={styles.objava__procitaj_celu}
-                    >
-                        { title }
-                    </Link>
-                </h2>
-                <time className={styles.creationDate}>
+            <NavLink to={`/posts/${id}`}>
+                <div className="drzac-slike">
+                    <img 
+                        // src={DEV_API_ROOT + "/" + coverImageUrl} 
+                        src={coverImageUrl} 
+                        alt="" 
+                        width={245}
+                        height={245}
+                        loading="lazy"
+                    />
+                </div>
+                <header className="objava__header container">
+                    <h2 className={styles.objava__naslov}>
+                        <Link 
+                            to={`/post/${id}`}
+                            className={styles.objava__procitaj_celu}
+                        >
+                            { title }
+                        </Link>
+                    </h2>
+                    
+                    <p className={styles.shortDescription}>
+                        { description }
+                    </p>
+                    <h3 className={styles.postAuthor}>
+                        <i>Napisao:</i> { user.username }
+                    </h3>
+                </header>
+                <div className="container">
+                    {
+                        authProvider.accessToken && (
+                            <>
+                                <Link 
+                                    to={`/post/${id}/edit`}
+                                    className={styles.objava__procitaj_celu}
+                                >
+                                    Izmeni
+                                </Link>
+                                <br/>
+                                <fetcher.Form
+                                    method="DELETE"
+                                    action={`/post/${id}/delete`}
+                                >
+                                    <button 
+                                        type="submit"
+                                        style={{fontSize: '20px', backgroundColor: 'red', color: 'white'}}
+                                    >
+                                        Obrisi
+                                    </button>
+                                </fetcher.Form>
+                            </>
+                        )
+                    }
+                </div>
+                <time className={styles.creationDate + " container"}>
                     { createdAt }
                 </time>
-                <p className={styles.shortDescription}>
-                    { description }
-                </p>
-                <h3 className={styles.postAuthor}>
-                    <i>Napisao:</i> { user.username }
-                </h3>
-            </header>
-            <div className="container">
-                <Link 
-                    to={`/post/${id}`} 
-                    className={styles.objava__procitaj_celu}
+                <ul 
+                    className="container"
+                    style={{
+                        display: 'flex',
+                        gap: '15px'
+                    }}
                 >
-                    Pročitaj celu objavu
-                </Link>
-                <br/>
-                <Link 
-                    to={`/post/${id}/edit`}
-                    className={styles.objava__procitaj_celu}
-                >
-                    Izmeni
-                </Link>
-                <br/>
-                <fetcher.Form
-                    method="DELETE"
-                    action={`/post/${id}/delete`}
-                >
-                    <button 
-                        type="submit"
-                        style={{fontSize: '20px', backgroundColor: 'red', color: 'white'}}
-                    >
-                        Obrisi
-                    </button>
-                </fetcher.Form>
-            </div>
-            <ul className="container">
-                <li>
-                    Lajkovi: { likeCount }
-                </li>
-                <li>
-                    Dislajkovi: { dislikeCount }
-                </li>
-                <li>
-                    Komentari: { commentCount }
-                </li>
-            </ul>
+                    <li>
+                        <i className="fa-solid fa-thumbs-up" aria-hidden="true"></i>: { likeCount }
+                    </li>
+                    <li>
+                        <i className="fa-solid fa-thumbs-down"></i>: { dislikeCount }
+                    </li>
+                    <li>
+                        <i className="fa-solid fa-comments"></i>: { commentCount }
+                    </li>
+                </ul>
+            </NavLink>
         </article>       
     );
 }

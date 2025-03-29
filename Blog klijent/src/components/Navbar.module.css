@@ -12,7 +12,13 @@
   list-style: none;
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
+  gap: 30px;
+}
+
+.navigation__item > a
+{
+  font-size: 20px;
 }
 
 .link

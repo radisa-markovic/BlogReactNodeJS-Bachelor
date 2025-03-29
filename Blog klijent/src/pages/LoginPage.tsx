@@ -2,14 +2,13 @@ import {
     Form, 
     useActionData,
     redirect,
-    LoaderFunctionArgs,
     ActionFunctionArgs
 } from "react-router-dom";
 
 import styles from './Forms.module.css';
 
-import FormError from "../FormError";
-import { authProvider } from "../../api/auth";
+import FormError from "../components/FormError";
+import { authProvider } from "../api/auth";
 
 const USERNAME_KEY_NAME: string = "username";
 const PASSWORD_KEY_NAME: string = "password";

@@ -13,8 +13,7 @@ export function SinglePost()
     };
     const fetcher = useFetcher();
     const { data : fetcherData } = fetcher;
-    console.log(fetcherData);
-
+ 
     return (
         <main className="objava__holder container">
             <article className="objava__cela">
@@ -34,17 +33,17 @@ export function SinglePost()
 
             <section>
                 <h2>Reakcije</h2>
-                <ul>
+                <ul style={{display: 'flex', gap: '20px'}}>
                     <li>
                         <fetcher.Form
                             method='POST'
                             action={`/post/${data.post.id}/like`}
                         >
                             <button type="submit" style={{backgroundColor: 'green', color: 'white'}}>
-                                Lajkuj
+                                <i className="fa-solid fa-thumbs-up" aria-hidden="true"></i>
+                                <span>({ data.post.likeCount })</span>
                             </button>
                         </fetcher.Form>
-                        <span>Lajkovi: { data.post.likeCount }</span>
                     </li>
                     <li>
                         <fetcher.Form
@@ -52,10 +51,10 @@ export function SinglePost()
                             action={`/post/${data.post.id}/dislike`}
                         >
                             <button type="submit" style={{backgroundColor: 'red', color: 'white'}}>
-                                Dislajkuj
+                                <i className="fa-solid fa-thumbs-down"></i>
+                                <span>({ data.post.dislikeCount })</span>
                             </button>
                         </fetcher.Form>
-                        <span>Dislajkovi: { data.post.dislikeCount }</span>
                     </li>
                 </ul>
             </section>

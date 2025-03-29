@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { PRETRAZI_KORISNICKO_IME, UPISI_PORUKU } from "../../ApiPutanje";
 import { Poruka } from "../../models/Poruka";
-import { upakujZahtev, uputiPoziv, vratiDatumPisanja } from "../../ServisneStvari";
-import UnosSaPredlozima from "../UnosSaPredlozima";
+// import { upakujZahtev, uputiPoziv, vratiDatumPisanja } from "../../ServisneStvari";
+// import UnosSaPredlozima from "../UnosSaPredlozima";
 
 interface Props
 {
@@ -46,12 +46,12 @@ export default function NapisiPoruku(props: Props): JSX.Element
                        placeholder="Korisničko ime primaoca"
                        onChange={promenaUnosa}
                 /> */}
-                <UnosSaPredlozima onChangeHandler={promenaUnosa} 
+                {/* <UnosSaPredlozima onChangeHandler={promenaUnosa} 
                                   bindingPropertyName="imePrimaoca"
                                   setPropertyName={setPoruka}
                                   urlPutanja={PRETRAZI_KORISNICKO_IME}
                                   placeholder="Ime primaoca"
-                />
+                /> */}
                 <textarea name="sadrzaj" 
                           className="kontrola objava__tekst"
                           placeholder="Sadržaj poruke"
@@ -85,19 +85,19 @@ export default function NapisiPoruku(props: Props): JSX.Element
     function posaljiPoruku(event: React.FormEvent): void
     {
         event.preventDefault();
-        poruka.datumSlanja = vratiDatumPisanja();
+        // poruka.datumSlanja = vratiDatumPisanja();
         poruka.imePosiljaoca = props.korisnickoIme;
         console.log(poruka);
 
-        uputiPoziv(UPISI_PORUKU, upakujZahtev("POST", poruka))
-        .then((odgovor) => {
-            alert("Poruka uspesno poslata");
-            console.log(odgovor);
-            // history.push("/");
-        })
-        .catch((greska) => {
-            alert("Doslo je do greske");
-            console.log(greska);
-        });
+        // uputiPoziv(UPISI_PORUKU, upakujZahtev("POST", poruka))
+        // .then((odgovor) => {
+        //     alert("Poruka uspesno poslata");
+        //     console.log(odgovor);
+        //     // history.push("/");
+        // })
+        // .catch((greska) => {
+        //     alert("Doslo je do greske");
+        //     console.log(greska);
+        // });
     }
 }

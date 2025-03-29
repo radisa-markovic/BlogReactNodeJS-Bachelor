@@ -16,9 +16,28 @@ export default function Navbar()
         <nav className={styles['navigation-bar']}>
             <ul className={styles.items + " container"}>
                 <li className="navigation__item">
-                    Blog
+                    <NavLink 
+                        to="/"
+                        style={{display: 'block', width: '140px', marginRight: 'auto'}}
+                    >
+                        <img src="/Logo.png" alt="React blog logo" />
+                    </NavLink>
                 </li>
-                <li className="navigation__item">
+                <li className={styles['navigation__item']}>
+                    <NavLink
+                        to="/"
+                        className={({ isActive, isPending }) =>
+                            isActive
+                              ? styles["active-route"]
+                              : isPending
+                              ? "pending"
+                              : ""
+                          }
+                    >
+                        Naslovna
+                    </NavLink>
+                </li>
+                <li className={styles['navigation__item']}>
                     <NavLink
                         to={RouteNames.allPosts}
                         className={({ isActive, isPending }) =>
@@ -35,7 +54,7 @@ export default function Navbar()
                 {
                     !authProvider.accessToken ?
                     <>
-                        <li className="navigation__item">
+                        <li className={styles['navigation__item']}>
                             <NavLink
                                 to={RouteNames.loginPage}
                                 className={({ isActive, isPending }) =>
@@ -49,7 +68,7 @@ export default function Navbar()
                                 Prijavi se
                             </NavLink>
                         </li>
-                        <li className="navigation__item">
+                        <li className={styles['navigation__item']}>
                             <NavLink
                                 to={RouteNames.registerPage}
                                 className={({ isActive, isPending }) =>
@@ -66,7 +85,7 @@ export default function Navbar()
                     </>
                     :
                     <>
-                        <li className="navigation__item">
+                        <li className={styles['navigation__item']}>
                             <NavLink
                                 to="post/new"
                                 className={({ isActive, isPending }) =>
@@ -80,7 +99,7 @@ export default function Navbar()
                                 Napiši objavu
                             </NavLink>
                         </li>
-                        <li className="navigation__item">
+                        <li className={styles['navigation__item']}>
                             <fetcher.Form
                                 method='post'
                                 action='/logout'

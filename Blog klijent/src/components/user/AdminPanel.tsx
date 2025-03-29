@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BANUJ_KORISNIKA, ODBLOKIRAJ_KORISNIKA, VRATI_BANOVANE_KORISNIKE, VRATI_SVE_KORISNIKE } from "../../ApiPutanje";
 import { Korisnik } from "../../models/Korisnik";
-import { upakujZahtev, uputiPoziv } from "../../ServisneStvari";
+// import { upakujZahtev, uputiPoziv } from "../../ServisneStvari";
 
 interface Props
 {
@@ -26,24 +26,24 @@ function AdminPanel(props: Props): JSX.Element
 
     /*======= VRACANJE KORISNIKA KOJI NISU BANOVANI ========*/
     useEffect(() => {
-        uputiPoziv(VRATI_SVE_KORISNIKE)
-        .then((korisnici) => {
-            setKorisnici(korisnici);
-        })
-        .catch((greska) => {
-            console.log(greska);
-        });
+        // uputiPoziv(VRATI_SVE_KORISNIKE)
+        // .then((korisnici) => {
+        //     setKorisnici(korisnici);
+        // })
+        // .catch((greska) => {
+        //     console.log(greska);
+        // });
     }, []);
 
     /*======= BANOVANI KORISNICI VRACANJE ========*/
     useEffect(() => {
-        uputiPoziv(VRATI_BANOVANE_KORISNIKE)
-        .then((banovaniKorisnici) => {
-            setBlokiraniKorisnici(banovaniKorisnici);
-        })
-        .catch((greska) => {
-            console.log(greska);
-        });
+        // uputiPoziv(VRATI_BANOVANE_KORISNIKE)
+        // .then((banovaniKorisnici) => {
+        //     setBlokiraniKorisnici(banovaniKorisnici);
+        // })
+        // .catch((greska) => {
+        //     console.log(greska);
+        // });
     }, []);
 
     return(
@@ -178,26 +178,26 @@ function AdminPanel(props: Props): JSX.Element
                 korisnickoIme: korisnikZaBanovanje.korisnickoIme
             };
     
-            uputiPoziv(BANUJ_KORISNIKA, upakujZahtev("POST", objekatZaBanovanje))
-            .then((odgovor) => {
-                alert("Uspesno banovanje");
+            // uputiPoziv(BANUJ_KORISNIKA, upakujZahtev("POST", objekatZaBanovanje))
+            // .then((odgovor) => {
+            //     alert("Uspesno banovanje");
                 
-                setKorisnici(korisnici.filter(korisnik => korisnik.id !== korisnikZaBanovanje.idKorisnika));
+            //     setKorisnici(korisnici.filter(korisnik => korisnik.id !== korisnikZaBanovanje.idKorisnika));
     
-                setBlokiraniKorisnici((banovaniKorisnici) => {
-                    return [...banovaniKorisnici, stariKorisnik]                
-                });
+            //     setBlokiraniKorisnici((banovaniKorisnici) => {
+            //         return [...banovaniKorisnici, stariKorisnik]                
+            //     });
     
-                setKorisnikZaBanovanje({
-                    idKorisnika: -1,
-                    korisnickoIme: ""
-                });
+            //     setKorisnikZaBanovanje({
+            //         idKorisnika: -1,
+            //         korisnickoIme: ""
+            //     });
     
-            })
-            .catch((greska) => {
-                alert("Neuspesno banovanje");
-                console.log(greska);
-            });
+            // })
+            // .catch((greska) => {
+            //     alert("Neuspesno banovanje");
+            //     console.log(greska);
+            // });
         }
         else
         {
@@ -235,19 +235,19 @@ function AdminPanel(props: Props): JSX.Element
             const idKorisnika: number = parseInt(kliknutoDugme.dataset.idkorisnika);
             const korisnickoIme: string = kliknutoDugme.dataset.korisnickoime;
     
-            uputiPoziv(ODBLOKIRAJ_KORISNIKA, upakujZahtev("POST", {idKorisnika: idKorisnika}))
-            .then((odgovor) => {
-                alert("Korisnik je uspešno odblokiran");
-                setBlokiraniKorisnici((blokiraniKorisnici) => {
-                    return blokiraniKorisnici.filter(blokiraniKorisnik => blokiraniKorisnik.id !== idKorisnika);
-                });
+            // uputiPoziv(ODBLOKIRAJ_KORISNIKA, upakujZahtev("POST", {idKorisnika: idKorisnika}))
+            // .then((odgovor) => {
+            //     alert("Korisnik je uspešno odblokiran");
+            //     setBlokiraniKorisnici((blokiraniKorisnici) => {
+            //         return blokiraniKorisnici.filter(blokiraniKorisnik => blokiraniKorisnik.id !== idKorisnika);
+            //     });
     
-                setKorisnici((korisnici) => {
-                    return [...korisnici, {id: idKorisnika, korisnickoIme: korisnickoIme}]
-                });
-            }).catch((odgovor) => {
-                alert("Javila se greška");
-            });
+            //     setKorisnici((korisnici) => {
+            //         return [...korisnici, {id: idKorisnika, korisnickoIme: korisnickoIme}]
+            //     });
+            // }).catch((odgovor) => {
+            //     alert("Javila se greška");
+            // });
         }
 
     }

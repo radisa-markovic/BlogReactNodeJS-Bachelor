@@ -3,9 +3,8 @@ import { useParams } from "react-router-dom";
 import { OBJAVE_API, URL_NASLOVNA_SLIKA, URL_PROFILNA_SLIKA, URL_ZA_KORISNICKE_SLIKE, VRATI_MOJE_OBJAVE } from "../../ApiPutanje";
 import { Korisnik } from "../../models/Korisnik";
 import { Objava } from "../../models/Objava";
-import { uputiPoziv } from "../../ServisneStvari";
-import NoviUnosSlike from "../blog-alatke/NoviUnosSlike";
-import Paginacija from "../blog-alatke/Paginacija";
+// import { uputiPoziv } from "../../ServisneStvari";
+
 import PregledObjave from "../blog/PostPreviewCard";
 import SpisakObjava from "../blog/PostList";
 
@@ -41,32 +40,32 @@ export default function KorisnickaStanica(props: Props): JSX.Element
 
     /*======= UCITAVANJE KORISNIKOVIH OBJAVA =======*/
     useEffect(() => {
-        uputiPoziv(`${OBJAVE_API}/${6}/${1}/${korisnickoIme}`)
-        .then((sopstveneObjave) => {
-            setSopstveneObjave(sopstveneObjave);
-        })
-        .catch((greska) => {
-            console.log(greska);
-        })
+        // uputiPoziv(`${OBJAVE_API}/${6}/${1}/${korisnickoIme}`)
+        // .then((sopstveneObjave) => {
+        //     setSopstveneObjave(sopstveneObjave);
+        // })
+        // .catch((greska) => {
+        //     console.log(greska);
+        // })
     }, []);
 
     /*======= UCITAVANJE KORISNIKOVIH PROFILNIH I NASLOVNIH SLIKA =======*/
     useEffect(() => {
-        uputiPoziv(`${URL_ZA_KORISNICKE_SLIKE}/${korisnickoIme}`)
-        .then((odgovor) => {
-            if(odgovor.urlNaslovneSlike)
-            {
-                setPutanjaDoNaslovneSlike(odgovor.urlNaslovneSlike);
-            }
+        // uputiPoziv(`${URL_ZA_KORISNICKE_SLIKE}/${korisnickoIme}`)
+        // .then((odgovor) => {
+        //     if(odgovor.urlNaslovneSlike)
+        //     {
+        //         setPutanjaDoNaslovneSlike(odgovor.urlNaslovneSlike);
+        //     }
 
-            if(odgovor.urlProfilneSlike)
-            {
-                setPutanjaDoProfilneSlike(odgovor.urlProfilneSlike);
-            }
-        })
-        .catch((greska) => {
-            console.error(greska);
-        });
+        //     if(odgovor.urlProfilneSlike)
+        //     {
+        //         setPutanjaDoProfilneSlike(odgovor.urlProfilneSlike);
+        //     }
+        // })
+        // .catch((greska) => {
+        //     console.error(greska);
+        // });
     }, []);
 
     return(
@@ -79,15 +78,15 @@ export default function KorisnickaStanica(props: Props): JSX.Element
                          height={200}
                     />
                 </div>
-                { 
+                {/* { 
                     stranicaJePrijavljenogKorisnika() && 
-                    // nacrtajFormuZaPromenuNaslovneSlike() 
+                    nacrtajFormuZaPromenuNaslovneSlike() 
                     <NoviUnosSlike idKorisnika={props.korisnik.id}
                                    tipKorisnickeSlike="naslovna"
                                    putanjaDoStareSlike={putanjaDoNaslovneSlike}
                                    postaviSliku={setNaslovnaSlika}
                     />
-                }
+                } */}
                 
                 <div className="korisnik__profilna-slika-holder">
                     <img src={profilnaSlika? URL.createObjectURL(profilnaSlika) : putanjaDoProfilneSlike} 
@@ -95,28 +94,28 @@ export default function KorisnickaStanica(props: Props): JSX.Element
                          className="korisnik__profilna-slika" 
                     />
                 </div>
-                { 
+                {/* { 
                     stranicaJePrijavljenogKorisnika() && 
-                    // nacrtajFormuZaPromenuProfilneSlike() 
+                    nacrtajFormuZaPromenuProfilneSlike() 
                     <NoviUnosSlike idKorisnika={props.korisnik.id}
                                    tipKorisnickeSlike="profilna"
                                    putanjaDoStareSlike={putanjaDoProfilneSlike}
                                    postaviSliku={setProfilnaSlika}
                     />
-                }
+                } */}
                 <h1 className="korisnik__naslov">
                     Objave korisnika: {korisnickoIme}
                 </h1>
             </header>
             {/* <div className="objava__spisak">
                 { nacrtajSopstveneObjave() }
-            </div> */}
+            </div>
             <Paginacija urlZaPaginaciju={OBJAVE_API} 
                         brojElemenataPoStranici={6} 
                         korisnickoIme="Misko"
                         postaviElemente={setSopstveneObjave}
                         najnovijePrvo={true}
-            />
+            /> */}
         </main>
     );
 

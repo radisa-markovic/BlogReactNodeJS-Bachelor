@@ -6,6 +6,7 @@
     margin-left: calc(var(--razmak-medju-elementima) / 2);
     margin-right: calc(var(--razmak-medju-elementima) / 2);
     margin-bottom: 2rem;
+    padding: 15px 5px;
 }
 
 .objava__naslov

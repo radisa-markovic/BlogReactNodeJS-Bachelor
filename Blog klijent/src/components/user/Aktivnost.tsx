@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { VRATI_DISLAJKOVANE_OBJAVE, VRATI_LAJKOVANE_OBJAVE, VRATI_MOJE_OBJAVE, VRATI_SVE_KORISNIKOVE_KOMENTARE } from "../../ApiPutanje";
 import { Korisnik } from "../../models/Korisnik";
 import { Objava } from "../../models/Objava";
-import { uputiPoziv } from "../../ServisneStvari";
+// import { uputiPoziv } from "../../ServisneStvari";
 import PregledObjave from "../blog/PostPreviewCard";
 
 interface Props
@@ -25,46 +25,46 @@ function Aktivnost(korisnik: Props): JSX.Element
 
     /*============ SVI KORISNIKOVI KOMENTARI =============*/
     useEffect(() => {
-        uputiPoziv(`${VRATI_SVE_KORISNIKOVE_KOMENTARE}/${korisnik.korisnik.korisnickoIme}`)
-        .then((komentari) => {
-            setKomentari(komentari);
-        })
-        .catch((greska) => {
-            console.log(greska);
-        })
+        // uputiPoziv(`${VRATI_SVE_KORISNIKOVE_KOMENTARE}/${korisnik.korisnik.korisnickoIme}`)
+        // .then((komentari) => {
+        //     setKomentari(komentari);
+        // })
+        // .catch((greska) => {
+        //     console.log(greska);
+        // })
     }, []);
 
     /*============ SVI LAJKOVANI POSTOVI =============*/
     useEffect(() => {
-        uputiPoziv(`${VRATI_LAJKOVANE_OBJAVE}/${korisnik.korisnik.korisnickoIme}`)
-        .then((lajkovaneObjave) => {
-            setLajkovaneObjave(lajkovaneObjave);
-        })
-        .catch((greska) => {
-            console.log(greska);
-        })
+        // uputiPoziv(`${VRATI_LAJKOVANE_OBJAVE}/${korisnik.korisnik.korisnickoIme}`)
+        // .then((lajkovaneObjave) => {
+        //     setLajkovaneObjave(lajkovaneObjave);
+        // })
+        // .catch((greska) => {
+        //     console.log(greska);
+        // })
     }, []);
 
     /*============ SVI DISLAJKOVANI POSTOVI =============*/
     useEffect(() => {
-        uputiPoziv(`${VRATI_DISLAJKOVANE_OBJAVE}/${korisnik.korisnik.korisnickoIme}`)
-        .then((dislajkovaneObjave) => {
-            setDislajkovaneObjave(dislajkovaneObjave);
-        })
-        .catch((greska) => {
-            console.log(greska);
-        })
+        // uputiPoziv(`${VRATI_DISLAJKOVANE_OBJAVE}/${korisnik.korisnik.korisnickoIme}`)
+        // .then((dislajkovaneObjave) => {
+        //     setDislajkovaneObjave(dislajkovaneObjave);
+        // })
+        // .catch((greska) => {
+        //     console.log(greska);
+        // })
     }, []);
 
     /*============ MOJI POSTOVI =============*/
     useEffect(() => {
-        uputiPoziv(`${VRATI_MOJE_OBJAVE}/${korisnik.korisnik.korisnickoIme}`)
-        .then((mojeObjave) => {
-            setMojeObjave(mojeObjave);
-        })
-        .catch((greska) => {
-            console.log(greska);
-        })
+        // uputiPoziv(`${VRATI_MOJE_OBJAVE}/${korisnik.korisnik.korisnickoIme}`)
+        // .then((mojeObjave) => {
+        //     setMojeObjave(mojeObjave);
+        // })
+        // .catch((greska) => {
+        //     console.log(greska);
+        // })
     }, []);
 
     return (

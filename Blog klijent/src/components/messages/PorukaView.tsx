@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { OZNACI_PORUKU_PROCITANOM } from "../../ApiPutanje";
 import { Poruka } from "../../models/Poruka";
-import { vratiDatumPisanja } from "../../ServisneStvari";
+// import { vratiDatumPisanja } from "../../ServisneStvari";
 
 interface Props
 {
@@ -129,7 +129,7 @@ function PorukaView(props: Props): JSX.Element
             naslov: "RE:" + props.poruka.naslov,
             procitana: false,
             sadrzaj: odgovor,
-            datumSlanja: vratiDatumPisanja()
+            datumSlanja: ""//vratiDatumPisanja()
         };
 
         props.odgovoriNaPoruku(porukaOdgovor);

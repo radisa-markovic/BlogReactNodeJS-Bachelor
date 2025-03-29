@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { UPISI_PORUKU, VRATI_KORISNIKOVE_PORUKE } from "../../ApiPutanje";
 import { Poruka } from "../../models/Poruka";
-import { upakujZahtev, uputiPoziv } from "../../ServisneStvari";
+// import { upakujZahtev, uputiPoziv } from "../../ServisneStvari";
 import PorukaView from "./PorukaView";
 
 interface Props
@@ -16,18 +16,18 @@ function SpisakPoruka(props: Props): JSX.Element
     const { korisnickoIme } = props;
 
     useEffect(() => {
-        uputiPoziv(`${VRATI_KORISNIKOVE_PORUKE}/${korisnickoIme}/${tipPoruka}`)
-        .then((poruke: Poruka[]) => {
-            console.log(poruke);
-            if(poruke)
-            {
-                poruke.forEach((poruka) => console.log(poruka.procitana.data[0]));
-                setPoruke(poruke);
-            }
-        })
-        .catch((greska) => {
-            console.log(greska);
-        });
+        // uputiPoziv(`${VRATI_KORISNIKOVE_PORUKE}/${korisnickoIme}/${tipPoruka}`)
+        // .then((poruke: Poruka[]) => {
+        //     console.log(poruke);
+        //     if(poruke)
+        //     {
+        //         poruke.forEach((poruka) => console.log(poruka.procitana.data[0]));
+        //         setPoruke(poruke);
+        //     }
+        // })
+        // .catch((greska) => {
+        //     console.log(greska);
+        // });
     }, [tipPoruka]);
 
     return(
@@ -78,16 +78,16 @@ function SpisakPoruka(props: Props): JSX.Element
     function odgovoriNaPoruku(odgovor: Poruka)
     {
         odgovor.imePosiljaoca = props.korisnickoIme;
-        uputiPoziv(UPISI_PORUKU, upakujZahtev("POST", odgovor))
-        .then((odgovor) => {
-            alert("Poruka uspesno poslata");
-            console.log(odgovor);
-            // history.push("/");
-        })
-        .catch((greska) => {
-            alert("Doslo je do greske");
-            console.log(greska);
-        });
+        // uputiPoziv(UPISI_PORUKU, upakujZahtev("POST", odgovor))
+        // .then((odgovor) => {
+        //     alert("Poruka uspesno poslata");
+        //     console.log(odgovor);
+        //     // history.push("/");
+        // })
+        // .catch((greska) => {
+        //     alert("Doslo je do greske");
+        //     console.log(greska);
+        // });
     }
 
     function filtrirajPoruke(event: React.ChangeEvent<HTMLSelectElement>): void
@@ -96,13 +96,13 @@ function SpisakPoruka(props: Props): JSX.Element
         console.log(odabranePoruke);
         setTipPoruka(odabranePoruke);
 
-        uputiPoziv(`${VRATI_KORISNIKOVE_PORUKE}/${korisnickoIme}/${odabranePoruke}`)
-        .then((poruke) => {
-            setPoruke(poruke);
-        })
-        .catch((greska) => {
-            console.log(greska);
-        });
+        // uputiPoziv(`${VRATI_KORISNIKOVE_PORUKE}/${korisnickoIme}/${odabranePoruke}`)
+        // .then((poruke) => {
+        //     setPoruke(poruke);
+        // })
+        // .catch((greska) => {
+        //     console.log(greska);
+        // });
     }
 }
 
