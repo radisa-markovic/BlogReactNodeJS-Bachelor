@@ -77,6 +77,7 @@ export const getUser = async (
 }
 
 export const createUser = async (request: Request, response: Response, next: NextFunction) => {
+    
     const errors = validationResult(request);
     if(errors.isEmpty())
     {
@@ -356,6 +357,7 @@ export const sendTokens = async (
         {
             await RefreshToken.destroy({
                 where: {
+                    //@ts-ignore
                     userId: foundToken.userId
                 }
             });
@@ -380,6 +382,7 @@ export const sendTokens = async (
                 }
             },
             where: {
+                //@ts-ignore
                 id: decodedToken.id
             }
         });

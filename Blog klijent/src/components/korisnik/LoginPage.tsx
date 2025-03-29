@@ -2,8 +2,11 @@ import {
     Form, 
     useActionData,
     redirect,
-    LoaderFunctionArgs
+    LoaderFunctionArgs,
+    ActionFunctionArgs
 } from "react-router-dom";
+
+import styles from './Forms.module.css';
 
 import FormError from "../FormError";
 import { authProvider } from "../../api/auth";
@@ -42,30 +45,36 @@ const LoginPage: React.FC<any> = () => {
                     <FormError errorText={actionData.usernameError}/>
                 }
                 <article className="forma__polje">
-                    <label htmlFor="korisnickoIme">
-                        <input 
-                            type="text" 
-                            placeholder="korisnickoIme" 
-                            id="korisnickoIme" 
-                            name={USERNAME_KEY_NAME}
-                            className="kontrola"
-                        />
+                    <label 
+                        htmlFor="korisnickoIme"
+                        className={styles.label}    
+                    >
+                        Korisničko ime
                     </label>
+                    <input 
+                        type="text" 
+                        id="korisnickoIme" 
+                        name={USERNAME_KEY_NAME}
+                        className={styles.kontrola}
+                    />
                 </article>
                 { 
                     actionData?.passwordError && 
                     <FormError errorText={actionData.passwordError} /> 
                 }
                 <article className="forma__polje">
-                    <label htmlFor="lozinka">
-                        <input 
-                            type="password" 
-                            placeholder="Lozinka"
-                            id="lozinka"
-                            name={PASSWORD_KEY_NAME}
-                            className="kontrola"
-                        />
+                    <label 
+                        htmlFor="lozinka"
+                        className={styles.label}
+                    >
+                        Lozinka
                     </label>
+                    <input 
+                        type="password" 
+                        id="lozinka"
+                        name={PASSWORD_KEY_NAME}
+                        className={styles.kontrola}
+                    />
                 </article>
 
                 <button 
@@ -89,7 +98,7 @@ export async function loginLoader()
     return null;
 }
 
-export async function loginAction({ request }: LoaderFunctionArgs)
+export async function loginAction({ request }: ActionFunctionArgs)
 {
     let loginErrors: LoginErrors = {};
     const formData = await request.formData();

@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom';
 
 import LoginPage, { loginAction, loginLoader } from './components/korisnik/LoginPage';
-import RegisterPage, { registerAction, registerLoader } from './components/korisnik/RegisterPage';
+import RegisterPage, { action as registerAction, registerLoader } from './components/korisnik/RegisterPage';
 import ErrorPage from './ErrorPage';
 import { authProvider } from './api/auth';
 
